@@ -2,5 +2,5 @@
 echo "Autoguardamdo compias en Github"
 git add .
 git commit -m "$1"
-git origin master
+git push origin master
 git status
