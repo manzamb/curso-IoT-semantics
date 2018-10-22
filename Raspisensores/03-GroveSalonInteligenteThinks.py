@@ -29,7 +29,7 @@ messageBuffer = []
 
 # Establece los pines a ser conectados
 bombillopin = 4     # Simula prender el bonbillo. D4
-ventiladorpin = 3   # Activa un rele que prenderia el ventilador. D2
+ventiladorpin = 3   # Activa un rele que prenderia el ventilador. D3
 temperatutapin = 0  # Lee la temperatura ambiente. A0
 sensorluzpin = 2    # Lee el sensor de luz. A2
 
