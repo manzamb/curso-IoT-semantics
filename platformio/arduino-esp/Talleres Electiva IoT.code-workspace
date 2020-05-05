@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "Taller 0 Entorno Arduino - Encender led Arduino"
+		},
+		{
+			"path": "Taller 1 Leer sensor análogo - fotocelda"
+		},
+		{
+			"path": "Taller 2-1 Potenciometro vs Led"
+		},
+		{
+			"path": "Taller 2-2 Fotocelda vs Led"
+		},
+		{
+			"path": "Taller 3 Utilizando Grove - Interaccion Compleja"
+		}
+	],
+	"settings": {}
+}

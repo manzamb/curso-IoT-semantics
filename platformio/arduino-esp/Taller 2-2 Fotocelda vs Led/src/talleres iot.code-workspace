@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "../../Taller 2 Leer Sensor"
+		},
+		{
+			"name": "Taller 1 Encender led Arduino",
+			"path": "../../Taller 1 Encender led Arduino"
+		},
+		{
+			"name": "Taller 1 Leyendo Sesnosr Analogo - TMP36",
+			"path": ".."
+		},
+		{
+			"name": "Taller 0 Conectando Arduino y ESP8266 - Electiva IoT",
+			"path": "../../Taller 0 Conectando Arduino y ESP8266 - Electiva IoT"
+		}
+	],
+	"settings": {}
+}
