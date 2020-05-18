@@ -31,7 +31,7 @@ const int temperaturapin = A0;  //Temperatura Grove
 
 //Variables Globales
 int umbralLuz = 500;            //Es el umbral en el cual se enciende el bombillo
-int umbralTemperatura = 31;     //Es el umbral en el cual se enciende el ventilador
+int umbralTemperatura = 29;     //Es el umbral en el cual se enciende el ventilador
 float luminosidad;              //Toma el valor en voltaje
 float temperatura;              //Toma el valor en grados
 boolean estadoventilador=false; //false = apagado
@@ -193,8 +193,5 @@ void loop()
                       dataFieldTwo , estadobombillo,
                       dataFieldThree , estadoventilador,
                       dataFieldFour, millis());     
-  
-//espera en milisegundos para volver a tomar la temperatura 
-  delay(2000);
     }
 }
