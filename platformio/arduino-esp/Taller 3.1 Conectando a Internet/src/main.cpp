@@ -19,8 +19,8 @@ unsigned int dataFieldFour = 4;                      // FCampo para enviar el ti
 //------------------------- Activar WIFI ESP8266 -----------------------
 #include <ESP8266WiFi.h>
 
-char ssid[] = "Yeye1";
-char password[] = "198219500";
+char ssid[] = "Redmi";
+char password[] = "Marcus336";
 WiFiClient client;              //Cliente Wifi para ThingSpeak
 //-------------------------- Fin Configuración WIFI ESP8266 --------------
 
@@ -31,7 +31,7 @@ const int temperaturapin = A0;  //Temperatura Grove
 
 //Variables Globales
 int umbralLuz = 500;            //Es el umbral en el cual se enciende el bombillo
-int umbralTemperatura = 31;     //Es el umbral en el cual se enciende el ventilador
+int umbralTemperatura = 32;     //Es el umbral en el cual se enciende el ventilador
 float luminosidad;              //Toma el valor en voltaje
 float temperatura;              //Toma el valor en grados
 boolean estadoventilador=false; //false = apagado
