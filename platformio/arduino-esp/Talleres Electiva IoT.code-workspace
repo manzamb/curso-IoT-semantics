@@ -18,6 +18,10 @@
 		{
 			"name": "Taller 3.1 Conectando a Internet",
 			"path": "Taller 3.1 Conectando a Internet"
+		},
+		{
+			"name": "Taller 4 Telemetria MQTT",
+			"path": "Taller 4 Telemetria MQTT"
 		}
 	],
 	"settings": {}
