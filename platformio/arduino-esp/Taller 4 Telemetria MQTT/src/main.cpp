@@ -1,6 +1,10 @@
 //Este skecht se ha desarrollado para activar el bombillo a partir del umbral
 //también el ventilador cuando la temperatura suba por encima de cierto umbral
+//Comunicaciones: Utiliza ThingSpeak para las telecomunicaciones con ESP8266 - Entorno Arduino
+//Tambien se ha modificadopar encapsular las funcionalidades añadidas en cada nuevo taller
 #include "Arduino.h"
+#include "IoTLib.h"
+
 //*************** Coneción a ThinkSpeak *********
 #include <ThingSpeak.h>
 
@@ -34,84 +38,8 @@ int umbralLuz = 500;            //Es el umbral en el cual se enciende el bombill
 int umbralTemperatura = 32;     //Es el umbral en el cual se enciende el ventilador
 float luminosidad;              //Toma el valor en voltaje
 float temperatura;              //Toma el valor en grados
-boolean estadoventilador=false; //false = apagado
+boolean estadoventilador =false; //false = apagado
 boolean estadobombillo = false; //false = apagado
-
-//Métodos para encapsular las funcionalidades
-void LeerSensores(void)
-{
-   //leer el sensor de luz
-   //luminosidad = analogRead(sensorluzpin); 
-
-    //recibe la temperatura para el sensor LM35
-   //temperatura = analogRead(temperaturapin);   
-   //temperatura = (5.0 * temperatura * 100.0)/1024.0; 
- 
-   //Lee estado de sensor de Temperatura para GROVE temp
-   int B=3975; //Valor del termistor
-   temperatura = analogRead(temperaturapin); //Obtencion del valor leido
-   float resistance=(float)(1023-temperatura)*10000/temperatura; //Obtencion del valor de la resistencia
-   temperatura=1/(log(resistance/10000)/B+1/298.15)-273.15; //Calculo de la temperatura
-}
-
-void ImprimirValoresSensores(void)
-{
- //Imprimir los valores sensados
-  Serial.println("========================================");
-  
- //Temeratura
- Serial.print("Temperatura: ");
- Serial.print(temperatura);
- Serial.print(" ");
- Serial.println(" ℃ ");
-
- //Luminosidad
- Serial.print("Luminosidad: ");
- Serial.print(luminosidad);
- Serial.print(" ");
- Serial.println(" V. ");
-
- //Estado del Bombillo
- if (estadobombillo == false)
-    Serial.println("Bombillo Apagado");
- else
-    Serial.println("Bombillo Encendido");
-
- //Estado del Ventilador
- if (estadoventilador == false)
-    Serial.println("Ventilador Apagado");
- else
-    Serial.println("Ventilador Encendido");
-}
-
-boolean UmbraldeTemperatura(float umbral)
-{
-  if(temperatura > umbral){
-    digitalWrite(ventiladorpin, HIGH); 
-    delay(1000);
-    return true;
-  }  
-  else{
-    digitalWrite(ventiladorpin, LOW);  
-    delay(10); 
-    return false;
-  } 
-}
-
-boolean UmbraldeLuz(float umbral)
-{
-  //Envia una señal que activa o desactiva el relay
-  if(luminosidad < umbral){
-    digitalWrite(bombillopin, HIGH);
-    delay(1000);
-    return true;
-  }   
-  else{
-    digitalWrite(bombillopin, LOW);
-    delay(10);
-    return false;  
-  }
-}
 
 // Use this function if you want to write a single field
 int writeTSData( long TSChannel, unsigned int TSField, float data ){
@@ -181,7 +109,10 @@ void loop()
   // Only update if posting time is exceeded
   if (millis() - lastUpdateTime >=  postingInterval) {
     lastUpdateTime = millis();
-    LeerSensores();
+
+    //LeerSensores();
+    LeerTemperatura(temperaturapin, GroveTmp,3.3);
+    //ImprimirValoresSensores();
     ImprimirValoresSensores();
 
     //Verificar los umbrales
