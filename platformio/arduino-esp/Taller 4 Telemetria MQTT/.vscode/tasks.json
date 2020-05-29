@@ -9,6 +9,14 @@
 			],
 			"group": "build",
 			"label": "PlatformIO: Build"
+		},
+		{
+			"type": "PlatformIO",
+			"task": "Remote Upload",
+			"problemMatcher": [
+				"$platformio"
+			],
+			"label": "PlatformIO: Remote Upload"
 		}
 	]
 }
