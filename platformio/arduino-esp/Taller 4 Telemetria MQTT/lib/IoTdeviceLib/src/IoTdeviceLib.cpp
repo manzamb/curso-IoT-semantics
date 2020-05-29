@@ -54,7 +54,7 @@ int LeerEstadoActuador (int actuadorPin)
     return digitalRead(actuadorPin);
 }
 
-void CambiarEstadoActuador(int actuadorPin, char nombreActuador[])
+void CambiarEstadoActuador(int actuadorPin, String nombreActuador)
 {
     int estadoActual = digitalRead(actuadorPin);
     if (estadoActual ==1)
@@ -98,7 +98,7 @@ int UmbralMenorDeSensorActuador(float dato, float umbral, int actuadorPin)
 }
 
 //--------------- SECCION DE INTERACCIÓN M2H --------------- 
-void ImprimirValorSensor(float dato, char entidaddeInteres[],char simboloMedida[])
+void ImprimirValorSensor(float dato, String entidaddeInteres,String simboloMedida)
 {
     //Imprimir el dato reportado
     Serial.print(entidaddeInteres);
@@ -108,7 +108,7 @@ void ImprimirValorSensor(float dato, char entidaddeInteres[],char simboloMedida[
     Serial.println(simboloMedida);
 }
 
-void ImprimirEstadoActuador (int actuadorPin,char nombreActuador[])
+void ImprimirEstadoActuador (int actuadorPin,String nombreActuador)
 {
     if (digitalRead(actuadorPin) == 1)
     {

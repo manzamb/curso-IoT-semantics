@@ -4,7 +4,6 @@
 #include <math.h>
 
 typedef enum SensorType {GroveTmp, Lm35, Tmp36, Lm35dz} TipoSensor;
-//typedef enum TipoSensor nuevotipo;
 
 /**
  * @brief Funcion genérica que lee un sensor de temperatura de los
@@ -39,7 +38,7 @@ int LeerEstadoActuador (int actuadorPin);
  * @param actuadorPin valor entero del pin al cual esta conectado el actuador
  * @param nombreActuador valor de cadena del nombre del actuador para efectos semánticos del ususario
  */
-void CambiarEstadoActuador(int actuadorPin, char nombreActuador[]);
+void CambiarEstadoActuador(int actuadorPin, String nombreActuador);
 
 /**
  * @brief Compara el valor del dato si es mayor que el Umbral. En caso se ser así 
@@ -70,7 +69,7 @@ int UmbralMenorDeSensorActuador(float dato, float umbral, int actuadorPin);
  * @param entidaddeInteres Valor semántico de la entidad medida
  * @param simboloMedida Simbolo de la medicion realizada
  */
-void ImprimirValorSensor(float dato, char entidaddeInteres[],char simboloMedida[]);
+void ImprimirValorSensor(float dato, String entidaddeInteres,String simboloMedida);
 
 /**
  * @brief Imprime el estado actual del actuador y coloca Encendido o Apagado
@@ -78,6 +77,6 @@ void ImprimirValorSensor(float dato, char entidaddeInteres[],char simboloMedida[
  * @param actuadorPin Puerto al que esta conectado el actuador
  * @param nombreActuador Nombre semántico del actuador
  */
-void ImprimirEstadoActuador (int actuadorPin,char nombreActuador[]);
+void ImprimirEstadoActuador (int actuadorPin,String nombreActuador);
 
 #endif

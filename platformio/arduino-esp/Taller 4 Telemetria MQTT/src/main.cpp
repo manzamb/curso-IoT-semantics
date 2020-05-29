@@ -4,6 +4,7 @@
 //Tambien se ha modificadopar encapsular las funcionalidades añadidas en cada nuevo taller
 #include "Arduino.h"
 #include <IoTdeviceLib.h>
+#include <IoTcomLib.h>
 
 //*************** Coneción a ThinkSpeak *********
 #include <ThingSpeak.h>
