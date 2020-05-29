@@ -1,4 +1,4 @@
-#include "IoTLib.h"
+#include <IoTdeviceLib.h>
 
 //------ SECCION DE LECTURA Y CONVERSION DIGITAL DE SENSORES ---------- 
 float LeerTemperatura(int temperaturapin, TipoSensor ts, float tension)
@@ -65,7 +65,7 @@ void CambiarEstadoActuador(int actuadorPin, char nombreActuador[])
     {
         digitalWrite(actuadorPin,1);
     }
-    imprimirEstadoActuador(actuadorPin, nombreActuador);
+    ImprimirEstadoActuador(actuadorPin, nombreActuador);
 }
 
 //--------------- SECCION DE INTERACCIÓN DE SENSORES-ACTUADORES --------------- 
@@ -100,9 +100,6 @@ int UmbralMenorDeSensorActuador(float dato, float umbral, int actuadorPin)
 //--------------- SECCION DE INTERACCIÓN M2H --------------- 
 void ImprimirValorSensor(float dato, char entidaddeInteres[],char simboloMedida[])
 {
-    //Imprimir los valores sensados
-    Serial.println("========================================");
-    
     //Imprimir el dato reportado
     Serial.print(entidaddeInteres);
     Serial.print(": ");

@@ -3,7 +3,7 @@
 //Comunicaciones: Utiliza ThingSpeak para las telecomunicaciones con ESP8266 - Entorno Arduino
 //Tambien se ha modificadopar encapsular las funcionalidades añadidas en cada nuevo taller
 #include "Arduino.h"
-#include "IoTLib.h"
+#include <IoTdeviceLib.h>
 
 //*************** Coneción a ThinkSpeak *********
 #include <ThingSpeak.h>
@@ -32,14 +32,16 @@ WiFiClient client;              //Cliente Wifi para ThingSpeak
 const int bombillopin = 3;      //Simulado con un led 13 en Arduino
 const int ventiladorpin = D5;    //Relay del ventilador
 const int temperaturapin = A0;  //Temperatura Grove 
+const int luminosidadpin = D6;  //Pin sensor de luminosidad
 
 //Variables Globales
 int umbralLuz = 500;            //Es el umbral en el cual se enciende el bombillo
-int umbralTemperatura = 32;     //Es el umbral en el cual se enciende el ventilador
+int umbralTemperatura = 28;     //Es el umbral en el cual se enciende el ventilador
 float luminosidad;              //Toma el valor en voltaje
 float temperatura;              //Toma el valor en grados
 boolean estadoventilador =false; //false = apagado
 boolean estadobombillo = false; //false = apagado
+int nummedicion = 0;            //Establece el número de medición
 
 // Use this function if you want to write a single field
 int writeTSData( long TSChannel, unsigned int TSField, float data ){
@@ -108,21 +110,30 @@ void loop()
 {
   // Only update if posting time is exceeded
   if (millis() - lastUpdateTime >=  postingInterval) {
-    lastUpdateTime = millis();
+      lastUpdateTime = millis();
 
-    //LeerSensores();
-    LeerTemperatura(temperaturapin, GroveTmp,3.3);
-    //ImprimirValoresSensores();
-    ImprimirValoresSensores();
+      //LeerSensores
+      temperatura = LeerTemperatura(temperaturapin, GroveTmp,3.3);
+      luminosidad = LeerLuminosidad(luminosidadpin);
 
-    //Verificar los umbrales
-    estadoventilador = UmbraldeTemperatura(umbralTemperatura);
-    estadobombillo = UmbraldeLuz(umbralLuz);
+      //Imprimir Valores Sensores y Actuadores 
+      Serial.print("=========== Medición No.: ");
+      Serial.print(nummedicion++);
+      Serial.println(" ============");
+      ImprimirValorSensor(temperatura,"Temperatura Sala"," ℃ ");
+      //Se verifica umbral antes de imprimier el estado del actuador
+      estadoventilador = UmbralMayorDeSensorActuador(temperatura,umbralTemperatura,ventiladorpin);
+      ImprimirEstadoActuador(ventiladorpin,"Ventilador Sala");
+      ImprimirValorSensor(luminosidad,"Luminosidad Sala"," V. ");
+      //Se verifica umbral antes de imprimier el estado del actuador
+      estadobombillo = UmbralMenorDeSensorActuador(luminosidad,umbralLuz,luminosidadpin);
+      ImprimirEstadoActuador(bombillopin,"Bobillo Sala");
+      Serial.println("========================================");
 
-    //Enviar los Datos a ThinkSpeak
-    write2TSData( channelID , dataFieldOne , temperatura , 
-                      dataFieldTwo , estadobombillo,
-                      dataFieldThree , estadoventilador,
-                      dataFieldFour, millis());     
+      //Enviar los Datos a ThinkSpeak
+      write2TSData( channelID , dataFieldOne , temperatura , 
+                        dataFieldTwo , estadobombillo,
+                        dataFieldThree , estadoventilador,
+                        dataFieldFour, millis());     
     }
 }

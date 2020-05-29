@@ -1,5 +1,5 @@
-#ifndef _IoTLib
-#define _IoTLib
+#ifndef _IoTdeviceLib
+#define _IoTdeviceLib
 #include <SoftwareSerial.h>
 #include <math.h>
 
