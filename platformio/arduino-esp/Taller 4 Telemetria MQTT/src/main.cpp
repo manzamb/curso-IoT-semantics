@@ -16,14 +16,16 @@ const int temperaturapin = A0;  //Temperatura Grove
 const int luminosidadpin = D6;  //Pin sensor de luminosidad
 
 //Variables Globales
-int umbralLuz = 500;            //Es el umbral en el cual se enciende el bombillo
-int umbralTemperatura = 28;     //Es el umbral en el cual se enciende el ventilador
-float luminosidad;              //Toma el valor en voltaje
-float temperatura;              //Toma el valor en grados
-boolean estadoventilador =false;//false = apagado
-boolean estadobombillo = false; //false = apagado
-int nummedicion = 0;            //Establece el número de medición
+int umbralLuz = 500;                                //Es el umbral en el cual se enciende el bombillo
+int umbralTemperatura = 28;                         //Es el umbral en el cual se enciende el ventilador
+float luminosidad;                                  //Toma el valor en voltaje
+float temperatura;                                  //Toma el valor en grados
+boolean estadoventilador =false;                    //false = apagado
+boolean estadobombillo = false;                     //false = apagado
+int nummedicion = 0;                                //Establece el número consecutivo de observacion hecha
 const unsigned long postingInterval = 20L * 1000L;  //Establece cada cuanto se envia a ThingSpeak
+unsigned long lastConnectionTime = 0;               //Para controlar el tiempo de generar nueva medición
+long lastUpdateTime = 0;                            //Momento de la última actualización
 
 //metodo cliente para controlar los eventos R1 y R2
 void setup()
@@ -31,8 +33,7 @@ void setup()
   //Abrir el puerto de lectura en el PC para mensajes
   Serial.begin(115200);
 
-  //--Comando para Conectarse a la WIFI Dese el Código  el ESP8266 --
-  // ConectarRed("Redmi","Marcus336");
+  //ConectarRed("Redmi","Marcus336");  //Conectar con datos desde el programa
   //-----Comando para Conectarse y configurar desde el Celular--------
   // Creamos una instancia de la clase WiFiManager
   WiFiManager wifiManager;
@@ -41,10 +42,10 @@ void setup()
   // todas las veces.
   //wifiManager.resetSettings();
 
-  // Cremos AP y portal cautivo
+  // Creamos AP y portal para configurar desde el Celular
   wifiManager.autoConnect("ESP8266Temp");
  
-  Serial.println("Ya estás conectado");
+  Serial.println("!Ya estás conectado¡");
   //----------- Fin de conección ESP8266 -----------------------------
 
   //Establecer los modos de los puertos
@@ -55,16 +56,11 @@ void setup()
 
   //inicializar aqui thingspeak
   InicializarThingSpeak();
-  
 }
-
-//metodo repetitivo
-unsigned long lastConnectionTime = 0;
-long lastUpdateTime = 0;
 
 void loop()                    
 {
-  // Only update if posting time is exceeded
+  // Solamente actualiza si el tiempo de publicación es excedido
   if (millis() - lastUpdateTime >=  postingInterval) {
       lastUpdateTime = millis();
 
