@@ -10,6 +10,5 @@ lib_deps =
   EspSoftwareSerial
 - En el main.cpp colocar #include <IoTdeviceLib> a mano y seleccionar de la lista deplegable para que actualice automáticamente los directorios de la librería
 
-
 Contacto:
  manzamb@unicauca.edu.co  

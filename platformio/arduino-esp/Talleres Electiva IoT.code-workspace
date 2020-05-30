@@ -22,6 +22,10 @@
 		{
 			"name": "Taller 4 Telemetria MQTT",
 			"path": "Taller 4 Telemetria MQTT"
+		},
+		{
+			"name": "Taller 3.2 Modularizando el Desarrollo",
+			"path": "Taller 3.2 Modularizando el Desarrollo"
 		}
 	],
 	"settings": {}
