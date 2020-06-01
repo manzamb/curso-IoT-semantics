@@ -65,7 +65,7 @@ void loop()
       lastUpdateTime = millis();
 
       //LeerSensores
-      temperatura = LeerTemperatura(temperaturapin, GroveTmp,3.3);
+      temperatura = LeerTemperatura(temperaturapin,GroveTmp,3.3);
       luminosidad = LeerLuminosidad(luminosidadpin);
 
       //Imprimir Valores Sensores y Actuadores 
