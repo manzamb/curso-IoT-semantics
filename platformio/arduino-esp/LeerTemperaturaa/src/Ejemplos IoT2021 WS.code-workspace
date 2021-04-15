@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "../../HolaMunodoEsp8266"
+		},
+		{
+			"name": "LeerTemperaturaa",
+			"path": ".."
+		}
+	],
+	"settings": {}
+}
