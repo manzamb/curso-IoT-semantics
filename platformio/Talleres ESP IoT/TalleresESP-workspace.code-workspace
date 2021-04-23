@@ -3,6 +3,10 @@
 		{
 			"name": "Taller 1 - Sensores y Actuadores",
 			"path": "Taller 1 - Sensores y Actuadores"
+		},
+		{
+			"name": "Taller 0 - Entorno de Desarrollo Blink",
+			"path": "Taller 0 - Entorno de Desarrollo Blink"
 		}
 	],
 	"settings": {}

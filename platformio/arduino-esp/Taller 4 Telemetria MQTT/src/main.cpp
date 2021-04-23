@@ -17,7 +17,7 @@ const int luminosidadpin = D6;  //Pin sensor de luminosidad
 
 //Variables Globales
 int umbralLuz = 500;                                //Es el umbral en el cual se enciende el bombillo
-int umbralTemperatura = 29;                         //Es el umbral en el cual se enciende el ventilador
+int umbralTemperatura = 27;                         //Es el umbral en el cual se enciende el ventilador
 float luminosidad;                                  //Toma el valor en voltaje
 float temperatura;                                  //Toma el valor en grados
 int estadoventilador =0;                            //0 = apagado
