@@ -19,8 +19,8 @@ unsigned int dataFieldFour = 4;                      // FCampo para enviar el ti
 //------------------------- Activar WIFI ESP8266 -----------------------
 #include <ESP8266WiFi.h>
 
-char ssid[] = "Redmi";
-char password[] = "Marcus336";
+char ssid[] = "Jackvalang";
+char password[] = "ValAng1515@";
 WiFiClient client;              //Cliente Wifi para ThingSpeak
 //-------------------------- Fin Configuración WIFI ESP8266 --------------
 
@@ -31,17 +31,26 @@ const int temperaturapin = A0;  //Temperatura Grove
 
 //Variables Globales
 int umbralLuz = 500;            //Es el umbral en el cual se enciende el bombillo
-int umbralTemperatura = 32;     //Es el umbral en el cual se enciende el ventilador
+int umbralTemperatura = 27;     //Es el umbral en el cual se enciende el ventilador
 float luminosidad;              //Toma el valor en voltaje
 float temperatura;              //Toma el valor en grados
 boolean estadoventilador=false; //false = apagado
 boolean estadobombillo = false; //false = apagado
 
 //Métodos para encapsular las funcionalidades
+//Simular lectura de fotocelda 
+long fotoceldafuncion()
+{
+  long randNumber;
+  return random(1023);
+}
+
+//Funcion para obtener los valores de los sensores
 void LeerSensores(void)
 {
    //leer el sensor de luz
    //luminosidad = analogRead(sensorluzpin); 
+   luminosidad = fotoceldafuncion();
 
     //recibe la temperatura para el sensor LM35
    //temperatura = analogRead(temperaturapin);   
@@ -170,6 +179,8 @@ void setup()
     ThingSpeak.begin( client );
   //************ Fin Conectar Cliente ThingSpeak ***
   
+  //Inicializar el generador de numeros aleatorios
+  randomSeed(analogRead(0));
 }
 
 //metodo repetitivo

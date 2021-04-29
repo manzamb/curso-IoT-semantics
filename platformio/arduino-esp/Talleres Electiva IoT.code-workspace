@@ -26,10 +26,8 @@
 		{
 			"name": "Taller 3.2 Modularizando el Desarrollo",
 			"path": "Taller 3.2 Modularizando el Desarrollo"
-		},
-		{
-			"path": "Taller 5 M5Stack/M5Stack-Covid19-Monitor"
 		}
 	],
-	"settings": {}
+	"settings": {
+	}
 }
