@@ -41,7 +41,6 @@ boolean estadobombillo = false; //false = apagado
 //Simular lectura de fotocelda 
 long fotoceldafuncion()
 {
-  long randNumber;
   return random(1023);
 }
 
