@@ -7,6 +7,10 @@
 		{
 			"name": "Taller 0 - Entorno de Desarrollo Blink",
 			"path": "Taller 0 - Entorno de Desarrollo Blink"
+		},
+		{
+			"name": "Taller 2 - Publicando Datos en la Nube - ThingSpeak",
+			"path": "Taller 2 - Publicando Datos en la Nube - ThingSpeak"
 		}
 	],
 	"settings": {}
