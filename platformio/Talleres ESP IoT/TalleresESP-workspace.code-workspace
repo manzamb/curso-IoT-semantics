@@ -11,6 +11,10 @@
 		{
 			"name": "Taller 2 - Publicando Datos en la Nube - ThingSpeak",
 			"path": "Taller 2 - Publicando Datos en la Nube - ThingSpeak"
+		},
+		{
+			"name": "Taller 3 - Librerias y MQTT Esp",
+			"path": "Taller 3 - Librerias y MQTT Esp"
 		}
 	],
 	"settings": {}
