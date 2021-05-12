@@ -15,6 +15,10 @@
 		{
 			"name": "Taller 3 - Librerias y MQTT Esp",
 			"path": "Taller 3 - Librerias y MQTT Esp"
+		},
+		{
+			"name": "Taller 2.1 - Creando librerias",
+			"path": "Taller 2.1 - Creando librerias"
 		}
 	],
 	"settings": {}

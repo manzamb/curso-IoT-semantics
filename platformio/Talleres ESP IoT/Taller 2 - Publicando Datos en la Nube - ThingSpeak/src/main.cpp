@@ -25,7 +25,7 @@ WiFiClient client;              //Cliente Wifi para ThingSpeak
 //-------------------------- Fin Configuración WIFI ESP8266 --------------
 
 //const int sensorluzpin = A3;    //Fotocelda Grove
-const int bombillopin = 3;      //Simulado con un led 13 en Arduino
+const int bombillopin = D3;      //Simulado con un led 13 en Arduino
 const int ventiladorpin = D5;    //Relay del ventilador
 const int temperaturapin = A0;  //Temperatura Grove 
 
@@ -111,7 +111,7 @@ boolean UmbraldeLuz(float umbral)
   //Envia una señal que activa o desactiva el relay
   if(luminosidad < umbral){
     digitalWrite(bombillopin, HIGH);
-    delay(1000);
+    delay(10);
     return true;
   }   
   else{

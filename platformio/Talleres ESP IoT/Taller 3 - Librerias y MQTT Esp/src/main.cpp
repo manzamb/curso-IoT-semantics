@@ -41,7 +41,8 @@ int value = 0;
 
 //Broquer MQTT
 //const char* mqtt_server = "iot.eclipse.org";
-const char* mqtt_server ="192.168.1.9";
+//Servidor en la ORANGEPi
+const char* mqtt_server ="192.168.68.110";
 //const char* mqtt_server = "192.168.121.81";
 
 void callback(char* topic, byte* payload, unsigned int length) {
@@ -155,7 +156,8 @@ void loop()
       ImprimirEstadoActuador(ventiladorpin,"Ventilador Sala");
       ImprimirValorSensor(luminosidad,"Luminosidad Sala"," V. ");
       //Se verifica umbral antes de imprimier el estado del actuador
-      //estadobombillo = UmbralMenorDeSensorActuador(luminosidad,umbralLuz,luminosidadpin);
+      //En caso de querer controlarlo con mqtt comentar la siguiente linea
+      estadobombillo = UmbralMenorDeSensorActuador(luminosidad,umbralLuz,luminosidadpin);
       ImprimirEstadoActuador(bombillopin,"Bobillo Sala");
       Serial.println("========================================"); 
 
@@ -171,5 +173,17 @@ void loop()
       Serial.print("Publicando el estado del ventilador en el Servidor MQTT: ");
       Serial.println(msg);
       client.publish("ventiladorSalida", msg);
+
+      //Publicar la luminosidad actual
+      snprintf (msg, 75, "%i", luminosidad);
+      Serial.print("Publicando la luminosidad en el Servidor MQTT: ");
+      Serial.println(msg);
+      client.publish("luminosidadSalida", msg);
+
+      //Publicar el estado del bombillo
+      snprintf (msg, 75, "%i", estadobombillo);
+      Serial.print("Publicando la luminosidad en el Servidor MQTT: ");
+      Serial.println(msg);
+      client.publish("bombilloSalidad", msg);
     }
 }
