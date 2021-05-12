@@ -13,7 +13,7 @@
 const int bombillopin = D3;      //Bombillo
 const int ventiladorpin = D5;   //Relay del ventilador
 const int temperaturapin = A0;  //Temperatura Grove 
-const int luminosidadpin = D6;  //Pin sensor de luminosidad
+const int luminosidadpin = A0;  //Pin sensor de luminosidad
 
 //Variables Globales
 int umbralLuz = 500;                                //Es el umbral en el cual se enciende el bombillo
@@ -121,6 +121,7 @@ void setup()
   //************* FIN Inicializar Servidor MQTT *****************
 
   //Establecer los modos de los puertos
+  //Se comenta este porque este sensor es simulado
   //pinMode(sensorluzpin, INPUT);
   pinMode(bombillopin, OUTPUT);
   pinMode(ventiladorpin, OUTPUT);
@@ -144,7 +145,10 @@ void loop()
 
       //LeerSensores
       temperatura = LeerTemperatura(temperaturapin, GroveTmp,3.3);
-      luminosidad = LeerLuminosidad(luminosidadpin);
+      //Para una lectura directa del sensor la linea es la suguiente
+      //luminosidad = LeerLuminosidad(luminosidadpin);
+      //Para una simulación del sensor se utioliza en mismo dato de temperatura
+      luminosidad = LeerLuminosidad(temperatura);
 
       //Imprimir Valores Sensores y Actuadores 
       Serial.print("=========== Medición No.: ");
@@ -157,7 +161,7 @@ void loop()
       ImprimirValorSensor(luminosidad,"Luminosidad Sala"," V. ");
       //Se verifica umbral antes de imprimier el estado del actuador
       //En caso de querer controlarlo con mqtt comentar la siguiente linea
-      estadobombillo = UmbralMenorDeSensorActuador(luminosidad,umbralLuz,luminosidadpin);
+      estadobombillo = UmbralMenorDeSensorActuador(luminosidad,umbralLuz,bombillopin);
       ImprimirEstadoActuador(bombillopin,"Bobillo Sala");
       Serial.println("========================================"); 
 
@@ -175,14 +179,15 @@ void loop()
       client.publish("ventiladorSalida", msg);
 
       //Publicar la luminosidad actual
-      snprintf (msg, 75, "%i", luminosidad);
+      Serial.println(luminosidad);
+      snprintf (msg, 75, "%f", luminosidad);
       Serial.print("Publicando la luminosidad en el Servidor MQTT: ");
       Serial.println(msg);
       client.publish("luminosidadSalida", msg);
 
       //Publicar el estado del bombillo
       snprintf (msg, 75, "%i", estadobombillo);
-      Serial.print("Publicando la luminosidad en el Servidor MQTT: ");
+      Serial.print("Publicando el estado del bombillo en el Servidor MQTT: ");
       Serial.println(msg);
       client.publish("bombilloSalidad", msg);
     }
