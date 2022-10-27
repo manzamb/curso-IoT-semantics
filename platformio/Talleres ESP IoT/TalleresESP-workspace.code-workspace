@@ -19,6 +19,10 @@
 		{
 			"name": "Taller 3 - Librerias y MQTT Esp",
 			"path": "Taller 3 - Librerias y MQTT Esp"
+		},
+		{
+			"name": "Taller Arduino",
+			"path": "../../../../Documents/PlatformIO/Projects/Taller Arduino"
 		}
 	],
 	"settings": {}
