@@ -2,8 +2,8 @@
 
 
 //pin en el que se conecta la salida Vout o pi medi del sensor de Fotocelda
-const int fotoceldaPin = A3; 
-const int ledPin = 4;
+const int fotoceldaPin = A2; 
+const int ledPin = 9;
 int brilloLed;
 
 //metodo cliente

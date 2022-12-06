@@ -3,7 +3,7 @@
 
 //pin en el que se conecta la salida Vout o pi medi del sensor de Fotocelda
 const int PotenciometroPin = 5; 
-const int ledPin = 4;
+const int ledPin = 9;
 int brilloLed;
 
 //metodo cliente
@@ -21,9 +21,17 @@ void loop()
  //como no tengo una resustencia de 10kh y coloque una de 4.5 kh 
  //se debe encontrar el mínimo voltaje y el máximo voltaje para poder mapearlo
  //correctamente y encender el led de acuerdo a la luz presente con PWM sobre el led
- //Para se usa la función MAP() 
- int valminPotenciometro = 0;
- int valmayorPotenciometro = 1023; 
+ //PWM es Pulse Width Modulation convierte una señal digital en una señal analógica 
+ //cambiando la cantidad de tiempo que se mantiene encendida o apagada
+ //El PWM, Pulse Width Modulation o Modulación por Ancho de Pulsos, sirve para variar 
+ // la energía recibida por un dispositivo electrónico variando rápidamente la energía que este recibe, 
+ //cambiando entre apagado y encendido. Una variación en el PWM produce un cambio en el Duty Cycle.
+ //El Duty Cycle es el tiempo que la señal está activa frente al tiempo que la señal está apagada. 
+ //Con un Duty Cycle del 50% la señal estará activa la mitad del tiempo, mientras que la otra mitad del tiempo estará apagada. Si el Duty Cycle es del 100%, la señal estará activa durante todo el tiempo.
+ //ver mas (https://hardzone.es/2018/03/11/uso-pwm-pc/)
+ //Para eso se usa la función MAP() 
+ int valminPotenciometro = 0;       //Cambiar por el valor mínimo experimental
+ int valmayorPotenciometro = 1023;  //Cambiar por el valor máximo experimental
  int valminBrilloLed = 0;
  int valmaxbrilloLed = 255;
 
