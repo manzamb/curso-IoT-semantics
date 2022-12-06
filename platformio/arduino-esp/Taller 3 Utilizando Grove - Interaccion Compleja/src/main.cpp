@@ -1,6 +1,11 @@
 //Este skecht se ha desarrollado para activar el bombillo a partir del umbral
 //también el ventilador cuando la temperatura suba por encima de cierto umbral
 #include "Arduino.h"
+#include <ChainableLED.h>
+ 
+#define NUM_LEDS  1                   //numero de led a ser conectados
+
+ChainableLED leds(7, 8, NUM_LEDS);  //Inicializa el actuador GRove RGB leds y los conecta a D7 y D8
 
 const int sensorluzpin = A3;    //Fotocelda Grove
 const int bombillopin = 4;      //Simulado con un led 13 en Arduino
@@ -9,7 +14,7 @@ const int temperaturapin = A0;  //Temperatura Grove
 
 //Variables Globales
 int umbralLuz = 500;            //Es el umbral en el cual se enciende el bombillo
-int umbralTemperatura = 27;     //Es el umbral en el cual se enciende el ventilador
+int umbralTemperatura = 24;     //Es el umbral en el cual se enciende el ventilador
 float luminosidad;              //Toma el valor en voltaje
 float temperatura;              //Toma el valor en grados
 boolean estadoventilador=false; //false = apagado
@@ -81,13 +86,15 @@ boolean UmbraldeLuz(float umbral)
 {
   //Envia una señal que activa o desactiva el relay
   if(luminosidad < umbral){
-    digitalWrite(bombillopin, HIGH);
+    //digitalWrite(bombillopin, HIGH);
+    leds.setColorRGB(0, 255, 0, 0); //coloca el color rojo
     delay(1000);
     return true;
   }   
   else{
-    digitalWrite(bombillopin, LOW);
-    delay(10);
+    //digitalWrite(bombillopin, LOW);
+    leds.setColorRGB(0, 0, 255, 0); //coloca el color verde
+    delay(1000);
     return false;  
   }
 }

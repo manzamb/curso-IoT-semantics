@@ -2,8 +2,8 @@
 
 
 //pin en el que se conecta la salida Vout o pi medi del sensor de Fotocelda
-const int fotoceldaPin = 3; 
-const int ledPin = 4;
+const int fotoceldaPin = A2; 
+const int ledPin = 9;
 int brilloLed;
 
 //metodo cliente
@@ -22,8 +22,8 @@ void loop()
  //se debe encontrar el mínimo voltaje y el máximo voltaje para poder mapearlo
  //correctamente y encender el led de acuerdo a la luz presente con PWM sobre el led
  //Para se usa la función MAP() 
- int valminfotocelda = 0;
- int valmayorfotocelda = 783;  //originalmente seria 1023
+ int valminfotocelda = 65;      //originalmente sería 0
+ int valmayorfotocelda = 845;  //originalmente seria 1023
  int valminBrilloLed = 0;
  int valmaxbrilloLed = 255;
 
