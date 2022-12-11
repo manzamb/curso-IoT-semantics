@@ -5,7 +5,7 @@
  
 #define NUM_LEDS  1                   //numero de led a ser conectados
 
-ChainableLED leds(7, 8, NUM_LEDS);  //Inicializa el actuador GRove RGB leds y los conecta a D7 y D8
+ChainableLED leds(7,8, NUM_LEDS);  //Inicializa el actuador GRove RGB leds y los conecta a D7 y D8
 
 const int sensorluzpin = A3;    //Fotocelda Grove
 const int bombillopin = 4;      //Simulado con un led 13 en Arduino
@@ -14,7 +14,7 @@ const int temperaturapin = A0;  //Temperatura Grove
 
 //Variables Globales
 int umbralLuz = 500;            //Es el umbral en el cual se enciende el bombillo
-int umbralTemperatura = 24;     //Es el umbral en el cual se enciende el ventilador
+int umbralTemperatura = 22;     //Es el umbral en el cual se enciende el ventilador
 float luminosidad;              //Toma el valor en voltaje
 float temperatura;              //Toma el valor en grados
 boolean estadoventilador=false; //false = apagado
@@ -66,7 +66,6 @@ void ImprimirValoresSensores(void)
  else
     Serial.println("Ventilador Encendido");
 }
-
 
 boolean UmbraldeTemperatura(float umbral)
 {

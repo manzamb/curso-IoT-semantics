@@ -19,14 +19,14 @@ unsigned int dataFieldFour = 4;                      // FCampo para enviar el ti
 //------------------------- Activar WIFI ESP8266 -----------------------
 #include <ESP8266WiFi.h>
 
-char ssid[] = "Jackvalang";
-char password[] = "ValAng1515@";
+char ssid[] = "sumothings_Guest";
+char password[] = "invitados123";
 WiFiClient client;              //Cliente Wifi para ThingSpeak
 //-------------------------- Fin Configuración WIFI ESP8266 --------------
 
 //const int sensorluzpin = A3;    //Fotocelda Grove
-const int bombillopin = D3;      //Simulado con un led 13 en Arduino
-const int ventiladorpin = D5;    //Relay del ventilador
+const int bombillopin = LED_BUILTIN;      //Simulado con un led 13 en Arduino
+const int ventiladorpin = D3;    //Relay del ventilador
 const int temperaturapin = A0;  //Temperatura Grove 
 
 //Variables Globales

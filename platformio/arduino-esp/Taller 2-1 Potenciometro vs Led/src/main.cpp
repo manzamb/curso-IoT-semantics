@@ -2,7 +2,7 @@
 
 
 //pin en el que se conecta la salida Vout o pi medi del sensor de Fotocelda
-const int PotenciometroPin = 5; 
+const int PotenciometroPin = A5; 
 const int ledPin = 9;
 int brilloLed;
 
@@ -30,8 +30,8 @@ void loop()
  //Con un Duty Cycle del 50% la señal estará activa la mitad del tiempo, mientras que la otra mitad del tiempo estará apagada. Si el Duty Cycle es del 100%, la señal estará activa durante todo el tiempo.
  //ver mas (https://hardzone.es/2018/03/11/uso-pwm-pc/)
  //Para eso se usa la función MAP() 
- int valminPotenciometro = 0;       //Cambiar por el valor mínimo experimental
- int valmayorPotenciometro = 1023;  //Cambiar por el valor máximo experimental
+ int valminPotenciometro = 25;       //Cambiar por el valor mínimo experimental
+ int valmayorPotenciometro = 1015;  //Cambiar por el valor máximo experimental
  int valminBrilloLed = 0;
  int valmaxbrilloLed = 255;
 

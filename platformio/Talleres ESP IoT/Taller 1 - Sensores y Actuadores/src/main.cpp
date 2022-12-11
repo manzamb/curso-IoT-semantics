@@ -3,8 +3,8 @@
 #include "Arduino.h"
 
 //const int sensorluzpin = A3;    //Fotocelda Grove
-const int bombillopin = 3;      //Simulado con un led 13 en Arduino
-const int ventiladorpin = D5;    //Relay del ventilador
+const int bombillopin = LED_BUILTIN;      //Simulado con un led 13 en Arduino
+const int ventiladorpin = D3;    //Relay del ventilador
 const int temperaturapin = A0;  //Temperatura Grove 
 
 //Variables Globales

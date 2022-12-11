@@ -3,6 +3,10 @@
 #include "Arduino.h"
 //*************** Coneción a ThinkSpeak *********
 #include <ThingSpeak.h>
+#include <ChainableLED.h>
+
+#define NUM_LEDS  1                   //numero de led a ser conectados
+ChainableLED leds(5,6, NUM_LEDS);  //Inicializa el actuador GRove RGB leds y los conecta a D7 y D8
 
 // Información del Canal y Campos de ThingSpeak
 char thingSpeakAddress[] = "api.thingspeak.com";
@@ -19,14 +23,14 @@ unsigned int dataFieldFour = 4;                      // FCampo para enviar el ti
 //------------------------- Activar WIFI ESP8266 -----------------------
 #include <ESP8266WiFi.h>
 
-char ssid[] = "Jackvalang";
-char password[] = "ValAng1515@";
+char ssid[] = "sumothings-Guest";
+char password[] = "invitados123";
 WiFiClient client;              //Cliente Wifi para ThingSpeak
 //-------------------------- Fin Configuración WIFI ESP8266 --------------
 
 //const int sensorluzpin = A3;    //Fotocelda Grove
-const int bombillopin = 3;      //Simulado con un led 13 en Arduino
-const int ventiladorpin = D5;    //Relay del ventilador
+const int bombillopin = LED_BUILTIN;      //Simulado con un led 13 en Arduino
+const int ventiladorpin = D3;    //Relay del ventilador
 const int temperaturapin = A0;  //Temperatura Grove 
 
 //Variables Globales
@@ -110,12 +114,14 @@ boolean UmbraldeLuz(float umbral)
 {
   //Envia una señal que activa o desactiva el relay
   if(luminosidad < umbral){
-    digitalWrite(bombillopin, HIGH);
+    //digitalWrite(bombillopin, HIGH);
+    leds.setColorRGB(0, 255, 0, 0); //coloca el color rojo
     delay(1000);
     return true;
   }   
   else{
-    digitalWrite(bombillopin, LOW);
+    //digitalWrite(bombillopin, LOW);
+    leds.setColorRGB(0, 0, 255, 0); //coloca el color verde
     delay(10);
     return false;  
   }
@@ -170,7 +176,7 @@ void setup()
 
   //Establecer los modos de los puertos
   //pinMode(sensorluzpin, INPUT);
-  pinMode(bombillopin, OUTPUT);
+  //pinMode(bombillopin, OUTPUT);
   pinMode(ventiladorpin, OUTPUT);
   pinMode(temperaturapin, INPUT);
 
