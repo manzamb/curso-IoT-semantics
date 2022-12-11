@@ -5,13 +5,13 @@
 #include "Arduino.h"
 #include <IoTdeviceLib.h>       //Librería con funciones de sensor - actuador
 #include <IoTcomLib.h>          //Librería con funciones de comunicación del dispositivo
-#include <DNSServer.h>
+#include <DNSServer.h>          //Es necesario instalar la librería EspSoftwareSerial y Wifimanager 
 #include <ESP8266WebServer.h>
 #include <WiFiManager.h>
 
 //const int sensorluzpin = A3;  //Fotocelda Grove
-const int bombillopin = D3;      //Simulado con un led 13 en Arduino
-const int ventiladorpin = D5;   //Relay del ventilador
+const int bombillopin = LED_BUILTIN;      //Simulado con un led 13 en Arduino
+const int ventiladorpin = D3;   //Relay del ventilador
 const int temperaturapin = A0;  //Temperatura Grove 
 const int luminosidadpin = D6;  //Pin sensor de luminosidad
 
