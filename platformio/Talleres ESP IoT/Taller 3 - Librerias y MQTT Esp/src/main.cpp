@@ -10,8 +10,8 @@
 
 
 //const int sensorluzpin = A3;  //Fotocelda Grove
-const int bombillopin = D3;      //Bombillo
-const int ventiladorpin = D5;   //Relay del ventilador
+const int bombillopin = LED_BUILTIN;      //Bombillo
+const int ventiladorpin = D3;   //Relay del ventilador
 const int temperaturapin = A0;  //Temperatura Grove 
 const int luminosidadpin = A0;  //Pin sensor de luminosidad
 
@@ -42,7 +42,7 @@ int value = 0;
 //Broquer MQTT
 //const char* mqtt_server = "iot.eclipse.org";
 //Servidor en la ORANGEPi
-const char* mqtt_server ="192.168.68.110";
+const char* mqtt_server ="192.168.68.106";
 //const char* mqtt_server = "192.168.121.81";
 
 void callback(char* topic, byte* payload, unsigned int length) {
@@ -189,6 +189,6 @@ void loop()
       snprintf (msg, 75, "%i", estadobombillo);
       Serial.print("Publicando el estado del bombillo en el Servidor MQTT: ");
       Serial.println(msg);
-      client.publish("bombilloSalidad", msg);
+      client.publish("bombilloSalida", msg);
     }
 }
