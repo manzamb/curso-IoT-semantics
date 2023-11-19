@@ -23,6 +23,10 @@
 		{
 			"name": "Taller Arduino",
 			"path": "../../../../Documents/PlatformIO/Projects/Taller Arduino"
+		},
+		{
+			"name": "Taller 1-1 Ampliando con Grove ADC",
+			"path": "Taller 1-1 Ampliando con Grove ADC"
 		}
 	],
 	"settings": {}

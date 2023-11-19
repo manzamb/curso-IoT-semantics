@@ -10,7 +10,7 @@
 #include <WiFiManager.h>
 
 //const int sensorluzpin = A3;  //Fotocelda Grove
-const int bombillopin = LED_BUILTIN;      //Simulado con un led 13 en Arduino
+const int bombillopin = D5;      //Simulado con un led 13 en Arduino
 const int ventiladorpin = D3;   //Relay del ventilador
 const int temperaturapin = A0;  //Temperatura Grove 
 const int luminosidadpin = D6;  //Pin sensor de luminosidad

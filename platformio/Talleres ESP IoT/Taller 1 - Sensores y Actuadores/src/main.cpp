@@ -3,13 +3,13 @@
 #include "Arduino.h"
 
 //const int sensorluzpin = A3;    //Fotocelda Grove
-const int bombillopin = LED_BUILTIN;      //Simulado con un led 13 en Arduino
+const int bombillopin = D5;      //Simulado con un led 13 en Arduino
 const int ventiladorpin = D3;    //Relay del ventilador
 const int temperaturapin = A0;  //Temperatura Grove 
 
 //Variables Globales
-int umbralLuz = 500;            //Es el umbral en el cual se enciende el bombillo
-int umbralTemperatura = 27;     //Es el umbral en el cual se enciende el ventilador
+int umbralLuz = 612;            //Es el umbral en el cual se enciende el bombillo
+int umbralTemperatura = 31;     //Es el umbral en el cual se enciende el ventilador
 float luminosidad;              //Toma el valor en voltaje
 float temperatura;              //Toma el valor en grados
 boolean estadoventilador=false; //false = apagado

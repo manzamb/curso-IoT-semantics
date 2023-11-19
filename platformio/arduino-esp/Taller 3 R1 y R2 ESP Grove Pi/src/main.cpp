@@ -1,15 +1,15 @@
 //Este skecht se ha desarrollado para activar el bombillo a partir del umbral
 //también el ventilador cuando la temperatura suba por encima de cierto umbral
 #include "Arduino.h"
-#include <ChainableLED.h>
+//#include <ChainableLED.h>
  
 #define NUM_LEDS  1                   //numero de led a ser conectados
 
-ChainableLED leds(7,8, NUM_LEDS);  //Inicializa el actuador GRove RGB leds y los conecta a D7 y D8
+//ChainableLED leds(7,8, NUM_LEDS);  //Inicializa el actuador GRove RGB leds y los conecta a D7 y D8
 
-const int sensorluzpin = A3;    //Fotocelda Grove
+const int sensorluzpin = A0;    //Fotocelda Grove
 const int bombillopin = 3;      //Simulado con un led 13 en Arduino
-const int ventiladorpin = 7;    //Relay del ventilador
+const int ventiladorpin = 5;    //Relay del ventilador
 const int temperaturapin = A0;  //Temperatura Grove 
 
 //Variables Globales
@@ -85,14 +85,14 @@ boolean UmbraldeLuz(float umbral)
 {
   //Envia una señal que activa o desactiva el relay
   if(luminosidad < umbral){
-    //digitalWrite(bombillopin, HIGH);
-    leds.setColorRGB(0, 255, 0, 0); //coloca el color rojo
+    digitalWrite(bombillopin, HIGH);
+    //leds.setColorRGB(0, 255, 0, 0); //coloca el color rojo
     delay(1000);
     return true;
   }   
   else{
-    //digitalWrite(bombillopin, LOW);
-    leds.setColorRGB(0, 0, 255, 0); //coloca el color verde
+    digitalWrite(bombillopin, LOW);
+    //leds.setColorRGB(0, 0, 255, 0); //coloca el color verde
     delay(1000);
     return false;  
   }
@@ -109,6 +109,10 @@ void setup()
   pinMode(bombillopin, OUTPUT);
   pinMode(ventiladorpin, OUTPUT);
   pinMode(temperaturapin, INPUT);
+
+  //Estado inicial de actuadores por defecto
+  digitalWrite(bombillopin, LOW);
+  digitalWrite(ventiladorpin, LOW);
   
 }
 

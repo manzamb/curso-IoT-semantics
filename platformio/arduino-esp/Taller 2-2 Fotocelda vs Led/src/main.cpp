@@ -22,8 +22,8 @@ void loop()
  //se debe encontrar el mínimo voltaje y el máximo voltaje para poder mapearlo
  //correctamente y encender el led de acuerdo a la luz presente con PWM sobre el led
  //Para se usa la función MAP() 
- int valminfotocelda = 131;      //originalmente sería 0
- int valmayorfotocelda = 850;  //originalmente seria 1023
+ int valminfotocelda = 231;      //originalmente sería 0
+ int valmayorfotocelda = 820;  //originalmente seria 1023
  int valminBrilloLed = 0;
  int valmaxbrilloLed = 255;
 
@@ -44,10 +44,10 @@ void loop()
 
  //Escribe en el led en formato PWM
  analogWrite(ledPin, brilloLed);
- //if(voltaje>50)
- //   digitalWrite(ledPin, HIGH);   // turn the LED on (HIGH is the voltage level)
- // else
- //   digitalWrite(ledPin, LOW);    // turn the LED off by making the voltage LOW
+ if(valorLuz>200)
+    digitalWrite(ledPin, HIGH);   // turn the LED on (HIGH is the voltage level)
+  else
+    digitalWrite(ledPin, LOW);    // turn the LED off by making the voltage LOW
   
 
 //espera en milisegundos para volver a tomar la temperatura 

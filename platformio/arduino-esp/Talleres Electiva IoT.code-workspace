@@ -26,6 +26,14 @@
 		{
 			"name": "Taller 3.2 Modularizando el Desarrollo",
 			"path": "Taller 3.2 Modularizando el Desarrollo"
+		},
+		{
+			"name": "Taller 3 Interaccion R1 y R2 Salon Inteligente",
+			"path": "Taller 3 Interaccion R1 y R2 Salon Inteligente"
+		},
+		{
+			"name": "Taller 3 R1 y R2 ESP Grove Pi",
+			"path": "Taller 3 R1 y R2 ESP Grove Pi"
 		}
 	],
 	"settings": {

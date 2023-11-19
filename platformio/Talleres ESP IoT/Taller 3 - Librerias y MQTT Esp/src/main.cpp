@@ -42,7 +42,7 @@ int value = 0;
 //Broquer MQTT
 //const char* mqtt_server = "iot.eclipse.org";
 //Servidor en la ORANGEPi
-const char* mqtt_server ="192.168.68.104";
+const char* mqtt_server ="192.168.127.7";
 //const char* mqtt_server = "192.168.121.81";
 
 void callback(char* topic, byte* payload, unsigned int length) {
