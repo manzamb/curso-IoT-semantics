@@ -27,6 +27,14 @@
 		{
 			"name": "Taller 1-1 Ampliando con Grove ADC",
 			"path": "Taller 1-1 Ampliando con Grove ADC"
+		},
+		{
+			"name": "Taller 2-1 Potenciometro led",
+			"path": "Taller 2-1 Potenciometro led"
+		},
+		{
+			"name": "Taller 2-2 Esp-Grove-ADC-DatosThingSpeak",
+			"path": "Taller 2-2 Esp-Grove-ADC-DatosThingSpeak"
 		}
 	],
 	"settings": {}

@@ -7,7 +7,7 @@
 
 ChainableLED leds(7,8, NUM_LEDS);  //Inicializa el actuador GRove RGB leds y los conecta a D7 y D8
 
-const int sensorluzpin = A3;    //Fotocelda Grove
+const int sensorluzpin = A2;    //Fotocelda Grove
 const int bombillopin = 3;      //Simulado con un led 13 en Arduino
 const int ventiladorpin = 7;    //Relay del ventilador
 const int temperaturapin = A0;  //Temperatura Grove 
@@ -29,12 +29,16 @@ void LeerSensores(void)
     //recibe la temperatura para el sensor LM35
    //temperatura = analogRead(temperaturapin);   
    //temperatura = (5.0 * temperatura * 100.0)/1024.0; 
+
+   //recibe la temperatura para el TMP36
+   temperatura = (analogRead(temperaturapin) * .004882814);  
+   temperatura = (temperatura - .5) * 100;  
  
    //Lee estado de sensor de Temperatura para GROVE temp
-   int B=3975; //Valor del termistor
-   temperatura = analogRead(temperaturapin); //Obtencion del valor leido
-   float resistance=(float)(1023-temperatura)*10000/temperatura; //Obtencion del valor de la resistencia
-   temperatura=1/(log(resistance/10000)/B+1/298.15)-273.15; //Calculo de la temperatura
+   //int B=3975; //Valor del termistor
+   //temperatura = analogRead(temperaturapin); //Obtencion del valor leido
+   //float resistance=(float)(1023-temperatura)*10000/temperatura; //Obtencion del valor de la resistencia
+   //temperatura=1/(log(resistance/10000)/B+1/298.15)-273.15; //Calculo de la temperatura
 }
 
 void ImprimirValoresSensores(void)
@@ -85,14 +89,14 @@ boolean UmbraldeLuz(float umbral)
 {
   //Envia una señal que activa o desactiva el relay
   if(luminosidad < umbral){
-    //digitalWrite(bombillopin, HIGH);
-    leds.setColorRGB(0, 255, 0, 0); //coloca el color rojo
+    digitalWrite(bombillopin, HIGH);
+    //leds.setColorRGB(0, 255, 0, 0); //coloca el color rojo
     delay(1000);
     return true;
   }   
   else{
-    //digitalWrite(bombillopin, LOW);
-    leds.setColorRGB(0, 0, 255, 0); //coloca el color verde
+    digitalWrite(bombillopin, LOW);
+    //leds.setColorRGB(0, 0, 255, 0); //coloca el color verde
     delay(1000);
     return false;  
   }
@@ -117,12 +121,13 @@ void setup()
 void loop()                    
 {
   LeerSensores();
-  ImprimirValoresSensores();
+
 
   //Verificar los umbrales
   estadoventilador = UmbraldeTemperatura(umbralTemperatura);
   estadobombillo = UmbraldeLuz(umbralLuz);
 
+  ImprimirValoresSensores();
   
 //espera en milisegundos para volver a tomar la temperatura 
   delay(2000);

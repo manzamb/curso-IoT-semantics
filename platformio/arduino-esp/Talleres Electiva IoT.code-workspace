@@ -34,6 +34,10 @@
 		{
 			"name": "Taller 3 R1 y R2 ESP Grove Pi",
 			"path": "Taller 3 R1 y R2 ESP Grove Pi"
+		},
+		{
+			"name": "Taller 1 - Leer Temperatura DHT11",
+			"path": "Taller 1 - Leer Temperatura DHT11"
 		}
 	],
 	"settings": {

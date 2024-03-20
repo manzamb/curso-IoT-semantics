@@ -4,7 +4,7 @@
 //Leer temperatura con un TMP36
 //pin en el que se conecta la salida Vout o pi medi del sensor TMP36
 const int temperaturePin = A0; 
-const int umbraltemperatura = 30;
+const int umbraltemperatura = 20;
 const int ledpin = 3;
 
 //calcula la temperatura dependiendo del voltaje recibido
