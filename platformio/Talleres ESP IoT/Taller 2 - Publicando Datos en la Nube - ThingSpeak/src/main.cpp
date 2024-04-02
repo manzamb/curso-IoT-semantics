@@ -6,9 +6,9 @@
 
 // Información del Canal y Campos de ThingSpeak
 char thingSpeakAddress[] = "api.thingspeak.com";
-unsigned long channelID = 799494;
-char* readAPIKey = (char*)"70GGTLNT0EMFP0WO";
-char* writeAPIKey = (char*)"7ZBZ9LU15LQRYKRF";
+unsigned long channelID = 1971876;
+char* readAPIKey = (char*)"CINKHYK8DSHZ1UM4";
+char* writeAPIKey = (char*)"VAY71QPOWPWSG4VU";
 const unsigned long postingInterval = 20L * 1000L;
 unsigned int dataFieldOne = 1;                       // Calpo para escribir el estado de la Temperatura
 unsigned int dataFieldTwo = 2;                       // Campo para escribir el estado del Bombillo
@@ -200,8 +200,8 @@ void loop()
 
     //Enviar los Datos a ThinkSpeak
     write2TSData( channelID , dataFieldOne , temperatura , 
-                      dataFieldTwo , estadobombillo,
+                      dataFieldTwo , luminosidad,
                       dataFieldThree , estadoventilador,
-                      dataFieldFour, millis());     
+                      dataFieldFour , estadobombillo);     
     }
 }

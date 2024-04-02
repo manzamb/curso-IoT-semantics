@@ -1,17 +1,15 @@
 //Este skecht se ha desarrollado para activar el bombillo a partir del umbral
 //también el ventilador cuando la temperatura suba por encima de cierto umbral
 #include "Arduino.h"
-//Para utilizar el ADC Grove se llama esta librería
 #include <Wire.h>
-//#include <ChainableLED.h>
-//*************** Coneción a ThinkSpeak *********
-#include <ThingSpeak.h>
+//Variables Globales
+int umbralLuz = 0.5;            //Es el umbral en el cual se enciende el bombillo
+int umbralTemperatura = 31;     //Es el umbral en el cual se enciende el ventilador
+float luminosidad;              //Toma el valor en voltaje
+float temperatura;              //Toma el valor en grados
+boolean estadoventilador=false; //false = apagado
+boolean estadobombillo = false; //false = apagado
 
-//Variables para inicializar el Grove Chainable Led
-//#define NUM_LEDS  1                   //numero de led a ser conectados
-//ChainableLED leds(6,8, NUM_LEDS);  //Inicializa el actuador GRove RGB leds y los conecta a D7 y D8
-
-//Variables para utilizar el ADC Grove
 #define ADDR_ADC121             0x50 // For v1.0 & v1.1, I2C address is 0x55
  
 #define V_REF 3.00
@@ -27,73 +25,6 @@
  
 unsigned int getData;
 float analogVal=0;         // convert
-
-//const int sensorluzpin = A3;    //Fotocelda Grove
-const int bombillopin = D5;      //Simulado con un led 13 en Arduino
-const int ventiladorpin = D3;    //Relay del ventilador
-const int temperaturapin = A0;  //Temperatura Grove 
-
-//Variables Globales
-float umbralLuz = 0.50;         //Es el umbral en el cual se enciende el bombillo Grove ADC Luz fluctua [0 - 2.01]
-int umbralTemperatura = 31;     //Es el umbral en el cual se enciende el ventilador
-float luminosidad;              //Toma el valor en voltaje
-float temperatura;              //Toma el valor en grados
-boolean estadoventilador=false; //false = apagado
-boolean estadobombillo = false; //false = apagado
-
-//Métodos para encapsular las funcionalidades
-//funciones del GAD Grove
-void init_adc();
-void read_adc();
-//Prototipos de funciones de usuario
-long fotoceldafuncion();
-void LeerSensores(void);
-void ImprimirValoresSensores(void);
-boolean UmbraldeTemperatura(float umbral);
-boolean UmbraldeLuz(float umbral);
-
-
-//metodo cliente para controlar los eventos R1 y R2
-void setup()
-{
-  //Abrir el puerto de lectura en el PC para mensajes
-  Serial.begin(115200);
-
-  //Inicializar ADC
-  Wire.begin();
-  init_adc();
-
-  //Establecer los modos de los puertos
-  //pinMode(sensorluzpin, INPUT);
-  pinMode(bombillopin, OUTPUT);
-  pinMode(ventiladorpin, OUTPUT);
-  pinMode(temperaturapin, INPUT);
-  
-  //Inicializar el generador de numeros aleatorios
-  randomSeed(analogRead(0));
-}
-
-//metodo repetitivo
-unsigned long lastConnectionTime = 0;
-long lastUpdateTime = 0;
-
-void loop()                    
-{
-
-    LeerSensores();
-    ImprimirValoresSensores();
-
-    //Verificar los umbrales
-    estadoventilador = UmbraldeTemperatura(umbralTemperatura);
-    estadobombillo = UmbraldeLuz(umbralLuz);
-
-    //Esperar dos segundos para la nueva medición de
-    delay(2000);
-
-}
-
-//Seccion de funciones que utiliza el programa principal
-
 void init_adc()
 {
   Wire.beginTransmission(ADDR_ADC121);        // transmit to device
@@ -104,8 +35,6 @@ void init_adc()
  
 void read_adc()     //unsigned int *data
 {
- 
- 
     Wire.beginTransmission(ADDR_ADC121);        // transmit to device
     Wire.write(REG_ADDR_RESULT);                // get result
     Wire.endTransmission();
@@ -121,17 +50,22 @@ void read_adc()     //unsigned int *data
     //Serial.println(getData);
     //delay(5);
     //Serial.print("The analog value is:");
-    //Serial.print(getData*V_REF*2/4096);
-    luminosidad = getData*V_REF*2/4096; 
+    //Serial.print(getData*V_REF*2/4096); 
+    luminosidad = getData*V_REF*2/4096;
     //Serial.println("V");
 }
 
-//funciones de usuario
+//const int sensorluzpin = A3;    //Fotocelda Grove
+const int bombillopin = D5;      //Simulado con un led 13 en Arduino
+const int ventiladorpin = D3;    //Relay del ventilador
+const int temperaturapin = A0;  //Temperatura Grove 
+
+//Métodos para encapsular las funcionalidades
 //Simular lectura de fotocelda 
-long fotoceldafuncion()
-{
-  return random(1023);
-}
+//long fotoceldafuncion()
+//{
+//  return random(1023);
+//}
 
 //Funcion para obtener los valores de los sensores
 void LeerSensores(void)
@@ -186,13 +120,11 @@ boolean UmbraldeTemperatura(float umbral)
 {
   if(temperatura > umbral){
     digitalWrite(ventiladorpin, HIGH); 
-    //leds.setColorRGB(0, 255, 0, 0); //coloca el color rojo
     delay(1000);
     return true;
   }  
   else{
     digitalWrite(ventiladorpin, LOW);  
-    //leds.setColorRGB(0, 0, 255, 0); //coloca el color verde
     delay(10); 
     return false;
   } 
@@ -211,4 +143,43 @@ boolean UmbraldeLuz(float umbral)
     delay(10);
     return false;  
   }
+}
+
+
+
+//metodo cliente para controlar los eventos R1 y R2
+void setup()
+{
+  //Abrir el puerto de lectura en el PC para mensajes
+  Serial.begin(115200);
+  Wire.begin();
+  init_adc();
+
+  //Establecer los modos de los puertos
+  //pinMode(sensorluzpin, INPUT);
+  pinMode(bombillopin, OUTPUT);
+  pinMode(ventiladorpin, OUTPUT);
+  pinMode(temperaturapin, INPUT);
+  
+  //Inicializar el generador de numeros aleatorios
+  //randomSeed(analogRead(0));
+}
+
+//metodo repetitivo
+unsigned long lastConnectionTime = 0;
+long lastUpdateTime = 0;
+
+void loop()                    
+{
+
+    LeerSensores();
+    ImprimirValoresSensores();
+
+    //Verificar los umbrales
+    estadoventilador = UmbraldeTemperatura(umbralTemperatura);
+    estadobombillo = UmbraldeLuz(umbralLuz);
+
+    //Esperar dos segundos para la nueva medición de
+    delay(2000);
+
 }

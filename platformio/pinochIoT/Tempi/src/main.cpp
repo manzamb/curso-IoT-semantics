@@ -26,8 +26,8 @@ unsigned int dataFieldFour = 4;                      // FCampo para enviar el ti
 //------------------------- Activar WIFI ESP8266 -----------------------
 #include <ESP8266WiFi.h>
 
-char ssid[] = "JackValan";
-char password[] = "ValAng1515@";
+char ssid[] = "";
+char password[] = "";
 WiFiClient client;              //Cliente Wifi para ThingSpeak
 //-------------------------- Fin Configuración WIFI ESP8266 --------------
 
@@ -92,7 +92,7 @@ void setup()
   WiFiManager wifiManager;
    // Descomentar para resetear configuración - Hacer el ejercicio con el celular
   // todas las veces.
-  //wifiManager.resetSettings();
+  wifiManager.resetSettings();
 
  //----------- Comando para Conectarse a la WIFI el ESP8266 ---------
   Serial.println("Conectandose a la WIFI!");
@@ -136,10 +136,10 @@ void loop()
     estadobombillo = UmbraldeLuz(umbralLuz);
 
     //Enviar los Datos a ThinkSpeak
-    write2TSData( channelID , dataFieldOne , temperatura , 
+    write2TSData( channelID , dataFieldOne , temperatura ,
                       dataFieldTwo , estadobombillo,
                       dataFieldThree , estadoventilador,
-                      dataFieldFour, millis());  
+                      dataFieldFour, luminosidad);  
 
     //Esperar dos segundos para la nueva medición de
     delay(2000);

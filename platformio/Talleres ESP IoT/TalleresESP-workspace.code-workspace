@@ -27,7 +27,18 @@
 		{
 			"name": "Taller 1-1 Ampliando con Grove ADC",
 			"path": "Taller 1-1 Ampliando con Grove ADC"
+		},
+		{
+			"name": "Taller 1-1 SEnsores y Actuadores con ADC",
+			"path": "Taller 1-1 SEnsores y Actuadores con ADC"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"files.associations": {
+			"array": "cpp",
+			"string": "cpp",
+			"string_view": "cpp",
+			"ranges": "cpp"
+		}
+	}
 }
