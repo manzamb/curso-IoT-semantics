@@ -3,13 +3,6 @@
 #include "Arduino.h"
 //Para utilizar el ADC Grove se llama esta librería
 #include <Wire.h>
-//#include <ChainableLED.h>
-//*************** Coneción a ThinkSpeak *********
-#include <ThingSpeak.h>
-
-//Variables para inicializar el Grove Chainable Led
-//#define NUM_LEDS  1                   //numero de led a ser conectados
-//ChainableLED leds(6,8, NUM_LEDS);  //Inicializa el actuador GRove RGB leds y los conecta a D7 y D8
 
 //Variables para utilizar el ADC Grove
 #define ADDR_ADC121             0x50 // For v1.0 & v1.1, I2C address is 0x55
@@ -45,6 +38,7 @@ boolean estadobombillo = false; //false = apagado
 //funciones del GAD Grove
 void init_adc();
 void read_adc();
+
 //Prototipos de funciones de usuario
 long fotoceldafuncion();
 void LeerSensores(void);
@@ -186,13 +180,11 @@ boolean UmbraldeTemperatura(float umbral)
 {
   if(temperatura > umbral){
     digitalWrite(ventiladorpin, HIGH); 
-    //leds.setColorRGB(0, 255, 0, 0); //coloca el color rojo
     delay(1000);
     return true;
   }  
   else{
     digitalWrite(ventiladorpin, LOW);  
-    //leds.setColorRGB(0, 0, 255, 0); //coloca el color verde
     delay(10); 
     return false;
   } 

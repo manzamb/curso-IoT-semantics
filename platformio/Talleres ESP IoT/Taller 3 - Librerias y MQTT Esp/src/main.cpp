@@ -42,7 +42,7 @@ int value = 0;
 //Broquer MQTT
 //const char* mqtt_server = "iot.eclipse.org";
 //Servidor en la ORANGEPi
-const char* mqtt_server ="192.168.127.7";
+const char* mqtt_server ="10.200.2.211";
 //const char* mqtt_server = "192.168.121.81";
 
 void callback(char* topic, byte* payload, unsigned int length) {
@@ -106,7 +106,7 @@ void setup()
 
   // Descomentar para resetear configuración - Hacer el ejercicio con el celular
   // todas las veces.
-  //wifiManager.resetSettings();
+  wifiManager.resetSettings();
 
   // Creamos AP y portal para configurar desde el Celular
   wifiManager.autoConnect("ESP8266Temp");
@@ -144,7 +144,8 @@ void loop()
       lastUpdateTime = millis();
 
       //LeerSensores
-      temperatura = LeerTemperatura(temperaturapin, GroveTmp,3.3);
+      //temperatura = LeerTemperatura(temperaturapin, GroveTmp,3.3);
+      temperatura = 25;
       //Para una lectura directa del sensor la linea es la suguiente
       //luminosidad = LeerLuminosidad(luminosidadpin);
       //Para una simulación del sensor se utioliza en mismo dato de temperatura

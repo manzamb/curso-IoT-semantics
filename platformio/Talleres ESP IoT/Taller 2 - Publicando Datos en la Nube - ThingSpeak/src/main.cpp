@@ -6,21 +6,21 @@
 
 // Información del Canal y Campos de ThingSpeak
 char thingSpeakAddress[] = "api.thingspeak.com";
-unsigned long channelID = 1971876;
-char* readAPIKey = (char*)"CINKHYK8DSHZ1UM4";
-char* writeAPIKey = (char*)"VAY71QPOWPWSG4VU";
+unsigned long channelID = 2477315;
+char* readAPIKey = (char*)"SXDNVOX2SOAJ22TN";
+char* writeAPIKey = (char*)"HYCWZ40XK7KR4905";
 const unsigned long postingInterval = 20L * 1000L;
-unsigned int dataFieldOne = 1;                       // Calpo para escribir el estado de la Temperatura
-unsigned int dataFieldTwo = 2;                       // Campo para escribir el estado del Bombillo
-unsigned int dataFieldThree = 3;                     // Campo para escribir el estado del ventilador
-unsigned int dataFieldFour = 4;                      // FCampo para enviar el tiempo de medición
+unsigned int dataFieldOne = 1;                       // Calpo para escribir el estado de la temperatura
+unsigned int dataFieldTwo = 2;                       // Campo para escribir el estado del ventilador
+unsigned int dataFieldThree = 3;                     // Campo para escribir el estado del bombillo
+unsigned int dataFieldFour = 4;                      // FCampo para enviar el tiempo de luz
 //*************** Fin Conección ThinkSpeak *******
 
 //------------------------- Activar WIFI ESP8266 -----------------------
 #include <ESP8266WiFi.h>
 
-char ssid[] = "TP-Link_B520";
-char password[] = "67097135";
+char ssid[] = "sumothings";
+char password[] = "sum0th1ngs@manzamb";
 WiFiClient client;              //Cliente Wifi para ThingSpeak
 //-------------------------- Fin Configuración WIFI ESP8266 --------------
 
