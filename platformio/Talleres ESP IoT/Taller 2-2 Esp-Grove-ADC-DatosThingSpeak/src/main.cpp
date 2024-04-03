@@ -1,7 +1,7 @@
 //Este skecht se ha desarrollado para activar el bombillo a partir del umbral
 //también el ventilador cuando la temperatura suba por encima de cierto umbral
 #include "Arduino.h"
-//Para utilizar el ADC Grove se llama esta librería
+//Para utilizar el ADC Grove se llama esta librería y Conectar la Fotocelda
 #include <Wire.h>
 
 //Variables para utilizar el ADC Grove
@@ -20,6 +20,30 @@
  
 unsigned int getData;
 float analogVal=0;         // convert
+
+//*************** Coneción a ThinkSpeak *********
+#include <ThingSpeak.h>
+
+// Información del Canal y Campos de ThingSpeak
+char thingSpeakAddress[] = "api.thingspeak.com";
+unsigned long channelID = 2477315;
+char* readAPIKey = (char*)"SXDNVOX2SOAJ22TN";
+char* writeAPIKey = (char*)"HYCWZ40XK7KR4905";
+const unsigned long postingInterval = 20L * 1000L;
+unsigned int dataFieldOne = 1;                       // Calpo para escribir el estado de la temperatura
+unsigned int dataFieldTwo = 2;                       // Campo para escribir el estado del ventilador
+unsigned int dataFieldThree = 3;                     // Campo para escribir el estado del bombillo
+unsigned int dataFieldFour = 4;                      // FCampo para enviar el tiempo de luz
+//*************** Fin Conección ThinkSpeak *******
+
+//------------------------- Activar WIFI ESP8266 -----------------------
+#include <ESP8266WiFi.h>
+
+char ssid[] = "sumothings";
+char password[] = "sum0th1ngs@manzamb";
+WiFiClient client;              //Cliente Wifi para ThingSpeak
+//-------------------------- Fin Configuración WIFI ESP8266 --------------
+
 
 //const int sensorluzpin = A3;    //Fotocelda Grove
 const int bombillopin = D5;      //Simulado con un led 13 en Arduino
@@ -46,6 +70,32 @@ void ImprimirValoresSensores(void);
 boolean UmbraldeTemperatura(float umbral);
 boolean UmbraldeLuz(float umbral);
 
+// Use this function if you want to write a single field
+int writeTSData( long TSChannel, unsigned int TSField, float data ){
+  int  writeSuccess = ThingSpeak.writeField( TSChannel, TSField, data, writeAPIKey ); // Write the data to the channel
+  if ( writeSuccess ){
+    //lcd.setCursor(0, 1);
+    //lcd.print("Send ThinkSpeak");
+    Serial.println( String(data) + " written to Thingspeak." );
+    }
+    
+    return writeSuccess;
+}
+
+//use this function if you want multiple fields simultaneously
+int write2TSData( long TSChannel, unsigned int TSField1, 
+                  float field1Data,unsigned int TSField2, long field2Data,
+                  unsigned int TSField3, long field3Data ,
+                  unsigned int TSField4, long field4Data ){
+
+  ThingSpeak.setField( TSField1, field1Data );
+  ThingSpeak.setField( TSField2, field2Data );
+  ThingSpeak.setField( TSField3, field3Data );
+  ThingSpeak.setField( TSField4, field4Data );
+
+  int printSuccess = ThingSpeak.writeFields( TSChannel, writeAPIKey );
+  return printSuccess;
+}
 
 //metodo cliente para controlar los eventos R1 y R2
 void setup()
@@ -57,14 +107,30 @@ void setup()
   Wire.begin();
   init_adc();
 
+  //----------- Comando para Conectarse a la WIFI el ESP8266 ---------
+  Serial.println("Conectandose a la WIFI!");
+
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    Serial.print(".");
+    delay(500);
+  }
+
+  Serial.println("");
+  Serial.println("WiFi conectada");
+  Serial.println(WiFi.localIP());
+  //----------- Fin de conección ESP8266 -----------------------------
+
   //Establecer los modos de los puertos
   //pinMode(sensorluzpin, INPUT);
   pinMode(bombillopin, OUTPUT);
   pinMode(ventiladorpin, OUTPUT);
   pinMode(temperaturapin, INPUT);
+
+  //************ Conectar Cliente ThinkSpeak *******
+    ThingSpeak.begin( client );
+  //************ Fin Conectar Cliente ThingSpeak ***
   
-  //Inicializar el generador de numeros aleatorios
-  randomSeed(analogRead(0));
 }
 
 //metodo repetitivo
@@ -73,7 +139,9 @@ long lastUpdateTime = 0;
 
 void loop()                    
 {
-
+ // Only update if posting time is exceeded
+  if (millis() - lastUpdateTime >=  postingInterval) {
+    lastUpdateTime = millis();
     LeerSensores();
     ImprimirValoresSensores();
 
@@ -81,8 +149,12 @@ void loop()
     estadoventilador = UmbraldeTemperatura(umbralTemperatura);
     estadobombillo = UmbraldeLuz(umbralLuz);
 
-    //Esperar dos segundos para la nueva medición de
-    delay(2000);
+    //Enviar los Datos a ThinkSpeak
+    write2TSData( channelID , dataFieldOne , temperatura , 
+                      dataFieldTwo , estadobombillo,
+                      dataFieldThree , estadoventilador,
+                      dataFieldFour, millis());     
+    }
 
 }
 
