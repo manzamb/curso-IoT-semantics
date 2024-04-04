@@ -4,9 +4,6 @@
 //Para utilizar el ADC Grove se llama esta librería
 #include <Wire.h>
 //#include <ChainableLED.h>
-//*************** Coneción a ThinkSpeak *********
-#include <ThingSpeak.h>
-
 //Variables para inicializar el Grove Chainable Led
 //#define NUM_LEDS  1                   //numero de led a ser conectados
 //ChainableLED leds(6,8, NUM_LEDS);  //Inicializa el actuador GRove RGB leds y los conecta a D7 y D8
