@@ -1,44 +1,29 @@
 {
 	"folders": [
 		{
-			"name": "Taller 0 - Entorno de Desarrollo Blink",
 			"path": "Taller 0 - Entorno de Desarrollo Blink"
 		},
 		{
-			"name": "Taller 1 - Sensores y Actuadores",
 			"path": "Taller 1 - Sensores y Actuadores"
 		},
 		{
-			"name": "Taller 2-1 Potenciometro led",
-			"path": "Taller 2-1 Potenciometro led"
+			"path": "Taller 1-1 SEnsores y Actuadores con ADC"
 		},
 		{
-			"name": "Taller 2 - Publicando Datos en la Nube - ThingSpeak",
 			"path": "Taller 2 - Publicando Datos en la Nube - ThingSpeak"
 		},
 		{
-			"name": "Taller 1-1 Ampliando con Grove ADC",
-			"path": "Taller 1-1 Ampliando con Grove ADC"
-		},
-		{
-			"name": "Taller 2.1 - Creando librerias",
 			"path": "Taller 2.1 - Creando librerias"
 		},
 		{
-			"name": "Taller 3 - Librerias y MQTT Esp",
-			"path": "Taller 3 - Librerias y MQTT Esp"
+			"path": "Taller 2-1 Potenciometro led"
 		},
 		{
-			"name": "Taller 2-2 Esp-Grove-ADC-DatosThingSpeak",
 			"path": "Taller 2-2 Esp-Grove-ADC-DatosThingSpeak"
+		},
+		{
+			"path": "Taller 3 - Librerias y MQTT Esp"
 		}
 	],
-	"settings": {
-		"files.associations": {
-			"array": "cpp",
-			"string": "cpp",
-			"string_view": "cpp",
-			"ranges": "cpp"
-		}
-	}
+	"settings": {}
 }
