@@ -31,6 +31,7 @@ void loop()
  //Con un Duty Cycle del 50% la señal estará activa la mitad del tiempo, mientras que la otra mitad del tiempo estará apagada. Si el Duty Cycle es del 100%, la señal estará activa durante todo el tiempo.
  //ver mas (https://hardzone.es/2018/03/11/uso-pwm-pc/)
  //Para eso se usa la función MAP() 
+ //Explicación de ChatGPT: https://chatgpt.com/share/66fe922b-305c-8005-8e46-ecbcf27cb18c
  int valminPotenciometro = 20;       //Cambiar por el valor mínimo experimental
  int valmayorPotenciometro = 1021;  //Cambiar por el valor máximo experimental
  int valminBrilloLed = 0;

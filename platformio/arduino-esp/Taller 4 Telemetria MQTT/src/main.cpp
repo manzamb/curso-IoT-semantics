@@ -13,7 +13,7 @@
 const int bombillopin = D3;      //Bombillo
 const int ventiladorpin = D5;   //Relay del ventilador
 const int temperaturapin = A0;  //Temperatura Grove 
-const int luminosidadpin = D6;  //Pin sensor de luminosidad
+const int luminosidadpin = A0;  //Pin sensor de luminosidad
 
 //Variables Globales
 int umbralLuz = 500;                                //Es el umbral en el cual se enciende el bombillo
@@ -41,7 +41,7 @@ int value = 0;
 
 //Broquer MQTT
 //const char* mqtt_server = "iot.eclipse.org";
-const char* mqtt_server ="192.168.1.9";
+const char* mqtt_server ="192.168.211.95";
 //const char* mqtt_server = "192.168.121.81";
 
 void callback(char* topic, byte* payload, unsigned int length) {
@@ -142,7 +142,8 @@ void loop()
       lastUpdateTime = millis();
 
       //LeerSensores
-      temperatura = LeerTemperatura(temperaturapin, GroveTmp,3.3);
+      //temperatura = LeerTemperatura(temperaturapin, GroveTmp,3.3);
+      temperatura = LeerTemperatura(temperaturapin,Tmp36,3.3);
       luminosidad = LeerLuminosidad(luminosidadpin);
 
       //Imprimir Valores Sensores y Actuadores 
