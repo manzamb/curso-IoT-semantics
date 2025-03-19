@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "Taller 0 Entorno de Desarrollo - Encender Led"
+		},
+		{
+			"name": "Taller 1 Sensores y Actuadores",
+			"path": "../../../../../../../Documents/proyectos IoT/curso-IoT-semantics/platformio/Talleres ESP 32/Taller 1 Sensores y Actuadores"
+		}
+	],
+	"settings": {}
+}
