@@ -6,6 +6,10 @@
 		{
 			"name": "Taller 1 Sensores y Actuadores",
 			"path": "../../../../../../../Documents/proyectos IoT/curso-IoT-semantics/platformio/Talleres ESP 32/Taller 1 Sensores y Actuadores"
+		},
+		{
+			"name": "Taller 2 Pulse With Modulation",
+			"path": "../../../../../../../Documents/proyectos IoT/curso-IoT-semantics/platformio/Talleres ESP 32/Taller 2 Pulse With Modulation"
 		}
 	],
 	"settings": {}

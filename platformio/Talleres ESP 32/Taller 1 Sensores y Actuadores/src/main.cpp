@@ -108,14 +108,16 @@ void setup()
   //Abrir el puerto de lectura en el PC para mensajes
   Serial.begin(115200);
 
+  // Resolución Sensores ADC
+  //Resolucion de los puesrtos ADC
+  analogReadResolution(12);
+
   //Establecer los modos de los puertos
-  //pinMode(sensorluzpin, INPUT);
+  pinMode(sensorluzpin, INPUT);
   pinMode(bombillopin, OUTPUT);
   pinMode(ventiladorpin, OUTPUT);
   pinMode(temperaturapin, INPUT);
   
-  //Inicializar el generador de numeros aleatorios
-  randomSeed(analogRead(0));
 }
 
 //metodo repetitivo
