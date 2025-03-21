@@ -4,16 +4,16 @@
 
 //Entradas digitales del ESP 32
 const int bombillopin = 18;     //Simulado con un led rojo
-const int ventiladorpin = 17;   //Simulado con un led azul
+const int ventiladorpin =25;   //Simulado con un led azul
 
 //Entradas Analogas del ESP 32
 const int temperaturapin = 4;  //Temperatura TMP35 
 const int potenciometro = 2;   //Poteciometro para ejemplo PWM
-const int sensorluzpin = 36;    //Fotocelda que 
+const int sensorluzpin = 35;    //Fotocelda que 
 
 //Variables Globales
 int umbralLuz = 612;            //Es el umbral en el cual se enciende el bombillo
-int umbralTemperatura = 29;     //Es el umbral en el cual se enciende el ventilador
+int umbralTemperatura = 15;     //Es el umbral en el cual se enciende el ventilador
 float luminosidad;              //Toma el valor en voltaje
 float temperatura;              //Toma el valor en grados
 boolean estadoventilador=false; //false = apagado
@@ -31,8 +31,8 @@ void LeerSensores(void)
    //temperatura = (5.0 * temperatura * 100.0)/1024.0; 
 
    //recibe la temperatura de un sensor TMP36
-   temperatura = (analogRead(temperaturapin) * .004882814);  
-   temperatura = (temperatura - .5) * 100;  
+   temperatura = (analogRead(temperaturapin) * (3300 / 1024));  
+   temperatura = (temperatura - 500) / 10;
  
    //Lee estado de sensor de Temperatura para GROVE temp
    //int B=3975; //Valor del termistor
