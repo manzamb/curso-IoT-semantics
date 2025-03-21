@@ -10,6 +10,10 @@
 		{
 			"name": "Taller 2 Pulse With Modulation",
 			"path": "../../../../../../../Documents/proyectos IoT/curso-IoT-semantics/platformio/Talleres ESP 32/Taller 2 Pulse With Modulation"
+		},
+		{
+			"name": "Taller 3 Publicando Datos en la Nube ThinkSpeak",
+			"path": "../../../../../../../Documents/proyectos IoT/curso-IoT-semantics/platformio/Talleres ESP 32/Taller 3 Publicando Datos en la Nube ThinkSpeak"
 		}
 	],
 	"settings": {}
