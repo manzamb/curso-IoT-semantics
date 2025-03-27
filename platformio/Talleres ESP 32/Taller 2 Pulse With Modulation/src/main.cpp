@@ -3,7 +3,7 @@
 #define LEDC_CHANNEL_0 0
 #define LEDC_TIMER_13_BIT 13
 #define LEDC_BASE_FREQ 5000
-#define LED_PIN 2
+#define LED_PIN 18
 int brightness = 0;
 int fadeAmount = 5;
 void ledcAnalogWrite(uint8_t channel, uint32_t value, uint32_t valueMax = 255)

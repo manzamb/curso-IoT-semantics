@@ -6,13 +6,13 @@
 
 // Información del Canal y Campos de ThingSpeak
 char thingSpeakAddress[] = "api.thingspeak.com";
-unsigned long channelID = 2477315;
-char* readAPIKey = (char*)"SXDNVOX2SOAJ22TN";
-char* writeAPIKey = (char*)"HYCWZ40XK7KR4905";
+unsigned long channelID = 1971876;
+char* readAPIKey = (char*)"CINKHYK8DSHZ1UM4";
+char* writeAPIKey = (char*)"VAY71QPOWPWSG4VU";
 const unsigned long postingInterval = 20L * 1000L;
 unsigned int dataFieldOne = 1;                       // Calpo para escribir el estado de la temperatura
-unsigned int dataFieldTwo = 2;                       // Campo para escribir el estado del ventilador
-unsigned int dataFieldThree = 3;                     // Campo para escribir el estado del bombillo
+unsigned int dataFieldTwo = 2;                       // Campo para escribir el estado del bombillo
+unsigned int dataFieldThree = 3;                     // Campo para escribir el estado del ventilador
 unsigned int dataFieldFour = 4;                      // FCampo para enviar el tiempo de luz
 //*************** Fin Conección ThinkSpeak *******
 
@@ -26,11 +26,11 @@ WiFiClient client;              //Cliente Wifi para ThingSpeak
 
 //Entradas digitales del ESP 32
 const int bombillopin = 18;     //Simulado con un led rojo
-const int ventiladorpin =25;   //Simulado con un led azul
+const int ventiladorpin =19;   //Simulado con un led azul
 
 //Entradas Analogas del ESP 32
-const int temperaturapin = 4;  //Temperatura TMP35 
-const int potenciometro = 2;   //Poteciometro para ejemplo PWM
+const int temperaturapin = 34;  //Temperatura TMP35 
+const int potenciometro = 39;   //Poteciometro para ejemplo PWM
 const int sensorluzpin = 35;    //Fotocelda que 
  
 
@@ -61,9 +61,8 @@ void LeerSensores(void)
    //temperatura = (5.0 * temperatura * 100.0)/1024.0; 
 
    //recibe la temperatura de un sensor TMP36
-   temperatura = (analogRead(temperaturapin) * (3300 / 1024));  
-   temperatura = (temperatura - 500) / 10;
- 
+   temperatura = (analogRead(temperaturapin) * (3.3 / 1024));  
+   temperatura = (temperatura - 0.5) * 100;
    //Lee estado de sensor de Temperatura para GROVE temp
    //int B=3975; //Valor del termistor
    //temperatura = analogRead(temperaturapin); //Obtencion del valor leido
@@ -209,8 +208,8 @@ void loop()
 
     //Enviar los Datos a ThinkSpeak
     write2TSData( channelID , dataFieldOne , temperatura , 
-                      dataFieldTwo , luminosidad,
+                      dataFieldTwo , estadobombillo,
                       dataFieldThree , estadoventilador,
-                      dataFieldFour , estadobombillo);     
+                      dataFieldFour , luminosidad);     
     }
 }

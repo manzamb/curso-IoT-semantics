@@ -28,13 +28,13 @@
 void setup() {
   // initialize digital pin LED_BUILTIN as an output.
   // for the ESP32 dev Board the LED_BUILTIN is 2
-  pinMode(2, OUTPUT);
+  pinMode(18, OUTPUT);
 }
 
 // the loop function runs over and over again forever
 void loop() {
-  digitalWrite(2, HIGH);   // turn the LED on (HIGH is the voltage level)
+  digitalWrite(18, HIGH);   // turn the LED on (HIGH is the voltage level)
   delay(1000);                       // wait for a second
-  digitalWrite(2, LOW);    // turn the LED off by making the voltage LOW
+  digitalWrite(18, LOW);    // turn the LED off by making the voltage LOW
   delay(1000);                       // wait for a second
 }

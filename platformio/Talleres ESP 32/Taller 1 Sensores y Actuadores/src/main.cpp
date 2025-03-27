@@ -7,7 +7,7 @@ const int bombillopin = 18;     //Simulado con un led rojo
 const int ventiladorpin =25;   //Simulado con un led azul
 
 //Entradas Analogas del ESP 32
-const int temperaturapin = 4;  //Temperatura TMP35 
+const int temperaturapin = 4;  //Temperatura TMP36 
 const int potenciometro = 2;   //Poteciometro para ejemplo PWM
 const int sensorluzpin = 35;    //Fotocelda que 
 
