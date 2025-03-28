@@ -15,6 +15,10 @@
 		{
 			"name": "Taller 4 Creando Librerias",
 			"path": "Taller 4 Creando Librerias"
+		},
+		{
+			"name": "Taller 5 Comunicacio M2M- MQTT",
+			"path": "Taller 5 Comunicacio M2M- MQTT"
 		}
 	],
 	"settings": {}
