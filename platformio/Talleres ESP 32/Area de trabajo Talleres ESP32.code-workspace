@@ -4,16 +4,13 @@
 			"path": "Taller 0 Entorno de Desarrollo - Encender Led"
 		},
 		{
-			"name": "Taller 1 Sensores y Actuadores",
-			"path": "../../../../../../../Documents/proyectos IoT/curso-IoT-semantics/platformio/Talleres ESP 32/Taller 1 Sensores y Actuadores"
+			"path": "Taller 1 Sensores y Actuadores"
 		},
 		{
-			"name": "Taller 2 Pulse With Modulation",
-			"path": "../../../../../../../Documents/proyectos IoT/curso-IoT-semantics/platformio/Talleres ESP 32/Taller 2 Pulse With Modulation"
+			"path": "Taller 2 Pulse With Modulation"
 		},
 		{
-			"name": "Taller 3 Publicando Datos en la Nube ThinkSpeak",
-			"path": "../../../../../../../Documents/proyectos IoT/curso-IoT-semantics/platformio/Talleres ESP 32/Taller 3 Publicando Datos en la Nube ThinkSpeak"
+			"path": "Taller 3 Publicando Datos en la Nube ThinkSpeak"
 		}
 	],
 	"settings": {}

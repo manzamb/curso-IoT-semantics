@@ -29,7 +29,7 @@ const int bombillopin = 18;     //Simulado con un led rojo
 const int ventiladorpin =19;   //Simulado con un led azul
 
 //Entradas Analogas del ESP 32
-const int temperaturapin = 34;  //Temperatura TMP35 
+const int temperaturapin = 36;  //Temperatura TMP36 
 const int potenciometro = 39;   //Poteciometro para ejemplo PWM
 const int sensorluzpin = 35;    //Fotocelda que 
  
@@ -53,16 +53,19 @@ long fotoceldafuncion()
 void LeerSensores(void)
 {
    //leer el sensor de luz
-   //luminosidad = analogRead(sensorluzpin); 
-   luminosidad = fotoceldafuncion();
+   luminosidad = analogRead(sensorluzpin); 
+   //luminosidad = fotoceldafuncion();
 
     //recibe la temperatura para el sensor LM35
    //temperatura = analogRead(temperaturapin);   
    //temperatura = (5.0 * temperatura * 100.0)/1024.0; 
 
    //recibe la temperatura de un sensor TMP36
-   temperatura = (analogRead(temperaturapin) * (3.3 / 1024));  
-   temperatura = (temperatura - 0.5) * 100;
+   int reading = analogRead(temperaturapin);  
+   float voltage = (reading * 3.3) / 4095.0;
+   Serial.print(voltage); Serial.println(" volts");
+   temperatura = (voltage - 0.5) * 100.0*2.0; 
+   //temperatura = (temperatura - 0.5 ) * 100;
    //Lee estado de sensor de Temperatura para GROVE temp
    //int B=3975; //Valor del termistor
    //temperatura = analogRead(temperaturapin); //Obtencion del valor leido
@@ -162,6 +165,10 @@ void setup()
   //Abrir el puerto de lectura en el PC para mensajes
   Serial.begin(115200);
 
+  // Resolución Sensores ADC
+  //Resolucion de los puesrtos ADC
+  analogReadResolution(12);
+
   //----------- Comando para Conectarse a la WIFI el ESP8266 ---------
   Serial.println("Conectandose a la WIFI!");
 
@@ -177,7 +184,7 @@ void setup()
   //----------- Fin de conección ESP8266 -----------------------------
 
   //Establecer los modos de los puertos
-  //pinMode(sensorluzpin, INPUT);
+  pinMode(sensorluzpin, INPUT);
   pinMode(bombillopin, OUTPUT);
   pinMode(ventiladorpin, OUTPUT);
   pinMode(temperaturapin, INPUT);
