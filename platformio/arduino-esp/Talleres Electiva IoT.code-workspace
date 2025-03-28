@@ -38,6 +38,10 @@
 		{
 			"name": "Taller 1 - Leer Temperatura DHT11",
 			"path": "Taller 1 - Leer Temperatura DHT11"
+		},
+		{
+			"name": "Taller prueba",
+			"path": "../../../Documents/PlatformIO/Projects/Taller prueba"
 		}
 	],
 	"settings": {

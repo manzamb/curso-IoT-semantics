@@ -23,6 +23,10 @@
 		},
 		{
 			"path": "Taller 3 - Librerias y MQTT Esp"
+		},
+		{
+			"name": "taller esp32 WROOM",
+			"path": "../../../Documents/PlatformIO/Projects/taller esp32 WROOM"
 		}
 	],
 	"settings": {}
