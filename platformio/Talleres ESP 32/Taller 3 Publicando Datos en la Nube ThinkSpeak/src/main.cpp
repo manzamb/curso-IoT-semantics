@@ -64,7 +64,7 @@ void LeerSensores(void)
    int reading = analogRead(temperaturapin);  
    float voltage = (reading * 3.3) / 4095.0;
    Serial.print(voltage); Serial.println(" volts");
-   temperatura = (voltage - 0.5) * 100.0*2.0; 
+   temperatura = (voltage - 0.5) * 100.0; 
    //temperatura = (temperatura - 0.5 ) * 100;
    //Lee estado de sensor de Temperatura para GROVE temp
    //int B=3975; //Valor del termistor

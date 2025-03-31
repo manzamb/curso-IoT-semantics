@@ -4,7 +4,7 @@
 //Tambien se ha modificadopar encapsular las funcionalidades añadidas en cada nuevo taller
 #include "Arduino.h"
 #include <IoTdeviceLib.h>       //Librería con funciones de sensor - actuador
-#include <IoTcomLib.h>          //Librería con funciones de comunicación del dispositivo
+//#include <IoTcomLib.h>          //Librería con funciones de comunicación del dispositivo
 #include <DNSServer.h>          //Es necesario instalar la librería EspSoftwareSerial y Wifimanager 
 #include <WiFiManager.h>
 
@@ -45,11 +45,12 @@ int value = 0;
 //Broquer MQTT
 //const char* mqtt_server = "iot.eclipse.org";
 //Servidor en la ORANGEPi
-const char* mqtt_server ="192.168.68.111";
+//const char* mqtt_server ="192.168.68.112";
 //const char* mqtt_server = "192.168.121.81";
+const char* mqtt_server ="test.mosquitto.org";
 
 void callback(char* topic, byte* payload, unsigned int length) {
-  Serial.print("Message arrived [");
+  Serial.print("Mensaje recibido [");
   Serial.print(topic);
   Serial.print("] ");
   for (unsigned int i = 0; i < length; i++) {
@@ -71,10 +72,12 @@ void callback(char* topic, byte* payload, unsigned int length) {
 void reconnect() {
   // Loop until we're reconnected
   while (!client.connected()) {
-    Serial.print("Attempting MQTT connection...");
+    Serial.print("Intentando conexión MQTT...");
+    String clientId = "ESP32Client-";
+    clientId += String(random(0xffff), HEX);
     // Attempt to connect
-    if (client.connect("ESP8266Client")) {
-      Serial.println("connected");
+    if (client.connect(clientId.c_str())) {
+      Serial.println("conectado");
       // Once connected, publish an announcement...
       if (temperatura > 0){
         snprintf (msg, 75, "%f", temperatura);
@@ -126,12 +129,23 @@ void setup()
   pinMode(ventiladorpin, OUTPUT);
   pinMode(temperaturapin, INPUT);
 
-  //inicializar aqui thingspeak
-  InicializarThingSpeak();
+//************* Inicializar Servidor MQTT *********************
+   //Inicializar el canal MQTT
+   client.setServer(mqtt_server, 1883);
+   client.setCallback(callback);
+   //************* FIN Inicializar Servidor MQTT *****************
 }
 
 void loop()                    
 {
+  //*********** Conectarse al servidor MQTT ****************
+  //Intentarconectarse al servidor MQTT
+  if (!client.connected()) {
+    reconnect();
+  }
+  client.loop();
+  //*********** FIn conectarse al Servidor MQTT ************
+
   // Solamente actualiza si el tiempo de publicación es excedido
   if (millis() - lastUpdateTime >=  postingInterval) {
       lastUpdateTime = millis();
@@ -154,11 +168,30 @@ void loop()
       ImprimirEstadoActuador(bombillopin,"Bobillo Sala");
       Serial.println("========================================");
 
-      //Enviar los Datos a ThinkSpeak
-      
-      EnviarThingSpeakVariosDatos(1 , temperatura , 
-                                  2 , estadobombillo,
-                                  3 , estadoventilador,
-                                  4, millis());     
+      //Enviar los datos al servidor MQTT
+      //Publicar la temperatura
+      snprintf (msg, 75, "%f", temperatura);
+      Serial.print("Publicando temperatura en el Servidor MQTT: ");
+      Serial.println(msg);
+      client.publish("temperaturaSalida", msg);
+
+      //Publicar el Estado del Ventilador
+      snprintf (msg, 75, "%i", estadoventilador);
+      Serial.print("Publicando el estado del ventilador en el Servidor MQTT: ");
+      Serial.println(msg);
+      client.publish("ventiladorSalida", msg);
+
+      //Publicar la luminosidad actual
+      Serial.println(luminosidad);
+      snprintf (msg, 75, "%f", luminosidad);
+      Serial.print("Publicando la luminosidad en el Servidor MQTT: ");
+      Serial.println(msg);
+      client.publish("luminosidadSalida", msg);
+
+      //Publicar el estado del bombillo
+      snprintf (msg, 75, "%i", estadobombillo);
+      Serial.print("Publicando el estado del bombillo en el Servidor MQTT: ");
+      Serial.println(msg);
+      client.publish("bombilloSalida", msg);   
     }
 }
