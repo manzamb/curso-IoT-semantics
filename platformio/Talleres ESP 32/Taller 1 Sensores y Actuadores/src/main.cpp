@@ -1,11 +1,12 @@
 //Este skecht se ha desarrollado para activar el bombillo a partir del umbral
 //también el ventilador cuando la temperatura suba por encima de cierto umbral
 #include "Arduino.h"
+#include "DHTesp.h" // Click here to get the library: http://librarymanager/All#DHTesp
 
 //These constants make it easier to change pin numbers later without editing the whole program
 const int bombillopin = 19;     //that’s the red LED for the lamp.
 const int ventiladorpin =18;   //that’s the LED that represents the fan.
-const int temperaturapin = 17;  //temperaturapin for the temperature sensor
+const int temperaturapin = 14;  //temperaturapin for the temperature sensor
 
 //Analog Inputs ESP 32
 const int potenciometro = 34;   //Poteciometro para ejemplo PWM
@@ -20,6 +21,7 @@ float temperatura;              //Toma el valor en grados
 //Finally, the booleans estadoventilador and estadobombillo keep track of the current state of each device
 boolean estadoventilador=false; //false = apagado
 boolean estadobombillo = false; //false = apagado
+DHTesp dht;
 
 //Métodos para encapsular las funcionalidades
 //it reads all the sensors
@@ -33,14 +35,17 @@ void LeerSensores(void)
    //temperatura = (5.0 * temperatura * 100.0)/1024.0; 
 
    //Then, we read the temperature sensor on pin 17
-   temperatura = (analogRead(temperaturapin) * (3300 / 1024));  
-   temperatura = (temperatura - 500) / 10;
+   // temperatura = (analogRead(temperaturapin) * (3300 / 1024));  
+   // temperatura = (temperatura - 500) / 10;
  
    //Lee estado de sensor de Temperatura para GROVE temp
    //int B=3975; //Valor del termistor
    //temperatura = analogRead(temperaturapin); //Obtencion del valor leido
    //float resistance=(float)(1023-temperatura)*10000/temperatura; //Obtencion del valor de la resistencia
    //temperatura=1/(log(resistance/10000)/B+1/298.15)-273.15; //Calculo de la temperatura
+
+   //Lee estado de sensor DHT11
+   temperatura = dht.getTemperature();
 }
 
 void ImprimirValoresSensores(void)
@@ -129,7 +134,8 @@ void setup()
   pinMode(bombillopin, OUTPUT);
   pinMode(ventiladorpin, OUTPUT);
   pinMode(temperaturapin, INPUT);
-  
+
+  dht.setup(temperaturapin, DHTesp::DHT11); // Connect DHT sensor to GPIO 16
 }
 
 //metodo repetitivo
