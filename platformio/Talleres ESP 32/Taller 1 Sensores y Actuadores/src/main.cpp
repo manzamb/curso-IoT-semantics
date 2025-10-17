@@ -80,7 +80,7 @@ void ImprimirValoresSensores(void)
 //Similarly, the function UmbraldeLuz() checks the light level
 //If the light is below the threshold, it means the room is dark — so the white LED turns on
 //If there’s enough light, it stays off
-This simulates an automatic room light that turns on at night or in low light.”
+//This simulates an automatic room light that turns on at night or in low light.”
 boolean UmbraldeTemperatura(float umbral)
 {
   if(temperatura > umbral){
@@ -95,6 +95,8 @@ boolean UmbraldeTemperatura(float umbral)
   } 
 }
 
+//Similarly, the function UmbraldeLuz() checks the light level.
+//If the light is below the threshold, it means the room is dark — so the white LED turns on
 boolean UmbraldeLuz(float umbral)
 {
   //Envia una señal que activa o desactiva el relay
