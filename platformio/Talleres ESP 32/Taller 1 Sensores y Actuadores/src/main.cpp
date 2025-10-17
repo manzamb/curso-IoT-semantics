@@ -13,8 +13,8 @@ const int potenciometro = 34;   //Poteciometro para ejemplo PWM
 const int sensorluzpin = 39;    //sensorluzpin for the light sensor
 
 //Variables Globales
-int umbralLuz = 612;            //If the light level is lower than 612, the lamp turns on
-int umbralTemperatura = 15;     //If the temperature is higher than 15 degrees Celsius, the fan turns on
+int umbralLuz = 1800;            //If the light level is lower than 612, the lamp turns on
+int umbralTemperatura = 27;     //If the temperature is higher than 15 degrees Celsius, the fan turns on
 //We also use variables like luminosidad and temperatura to store the sensor readings
 float luminosidad;              //Toma el valor en voltaje
 float temperatura;              //Toma el valor en grados
@@ -138,9 +138,7 @@ void setup()
   dht.setup(temperaturapin, DHTesp::DHT11); // Connect DHT sensor to GPIO 16
 }
 
-//metodo repetitivo
-unsigned long lastConnectionTime = 0;
-long lastUpdateTime = 0;
+
 
 void loop()                    
 {
@@ -153,6 +151,6 @@ void loop()
     estadobombillo = UmbraldeLuz(umbralLuz);
 
     //Esperar dos segundos para la nueva medición de
-    delay(2000);
+    delay(1000);
 
 }
