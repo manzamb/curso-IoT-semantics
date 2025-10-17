@@ -2,35 +2,37 @@
 //también el ventilador cuando la temperatura suba por encima de cierto umbral
 #include "Arduino.h"
 
-//Entradas digitales del ESP 32
-const int bombillopin = 18;     //Simulado con un led rojo
-const int ventiladorpin =25;   //Simulado con un led azul
+//These constants make it easier to change pin numbers later without editing the whole program
+const int bombillopin = 19;     //that’s the red LED for the lamp.
+const int ventiladorpin =18;   //that’s the LED that represents the fan.
+const int temperaturapin = 17;  //temperaturapin for the temperature sensor
 
-//Entradas Analogas del ESP 32
-const int temperaturapin = 4;  //Temperatura TMP36 
-const int potenciometro = 2;   //Poteciometro para ejemplo PWM
-const int sensorluzpin = 35;    //Fotocelda que 
+//Analog Inputs ESP 32
+const int potenciometro = 34;   //Poteciometro para ejemplo PWM
+const int sensorluzpin = 39;    //sensorluzpin for the light sensor
 
 //Variables Globales
-int umbralLuz = 612;            //Es el umbral en el cual se enciende el bombillo
-int umbralTemperatura = 15;     //Es el umbral en el cual se enciende el ventilador
+int umbralLuz = 612;            //If the light level is lower than 612, the lamp turns on
+int umbralTemperatura = 15;     //If the temperature is higher than 15 degrees Celsius, the fan turns on
+//We also use variables like luminosidad and temperatura to store the sensor readings
 float luminosidad;              //Toma el valor en voltaje
 float temperatura;              //Toma el valor en grados
+//Finally, the booleans estadoventilador and estadobombillo keep track of the current state of each device
 boolean estadoventilador=false; //false = apagado
 boolean estadobombillo = false; //false = apagado
 
 //Métodos para encapsular las funcionalidades
-//Funcion para obtener los valores de los sensores
+//it reads all the sensors
 void LeerSensores(void)
 {
-   //leer el sensor de luz
+   //First, we read the photoresistor value
    luminosidad = analogRead(sensorluzpin); 
 
    //recibe la temperatura para el sensor LM35
    //temperatura = analogRead(temperaturapin);   
    //temperatura = (5.0 * temperatura * 100.0)/1024.0; 
 
-   //recibe la temperatura de un sensor TMP36
+   //Then, we read the temperature sensor on pin 17
    temperatura = (analogRead(temperaturapin) * (3300 / 1024));  
    temperatura = (temperatura - 500) / 10;
  
@@ -43,7 +45,9 @@ void LeerSensores(void)
 
 void ImprimirValoresSensores(void)
 {
- //Imprimir los valores sensados
+ //it prints the values on the serial monitor
+ //We can see the temperature, the light level, and the state of both the fan and the lamp
+ //This helps us check if our system is reacting correctly
   Serial.println("========================================");
   
  //Temeratura
@@ -64,13 +68,19 @@ void ImprimirValoresSensores(void)
  else
     Serial.println("Bombillo Encendido");
 
- //Estado del Ventilador
+ //It compares the current temperature with the threshold we defined
+ //If the temperature is higher than the threshold, the fan (red LED) turns on. Otherwise, it turns off
+
  if (estadoventilador == false)
     Serial.println("Ventilador Apagado");
  else
     Serial.println("Ventilador Encendido");
 }
 
+//Similarly, the function UmbraldeLuz() checks the light level
+//If the light is below the threshold, it means the room is dark — so the white LED turns on
+//If there’s enough light, it stays off
+This simulates an automatic room light that turns on at night or in low light.”
 boolean UmbraldeTemperatura(float umbral)
 {
   if(temperatura > umbral){
