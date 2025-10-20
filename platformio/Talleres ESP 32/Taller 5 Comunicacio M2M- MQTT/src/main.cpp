@@ -46,8 +46,8 @@ int value = 0;
 //const char* mqtt_server = "iot.eclipse.org";
 //Servidor en la ORANGEPi
 //const char* mqtt_server ="192.168.68.112";
-//const char* mqtt_server = "192.168.121.81";
-const char* mqtt_server ="test.mosquitto.org";
+const char* mqtt_server = "192.168.211.77";
+//const char* mqtt_server ="test.mosquitto.org";
 
 void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Mensaje recibido [");
