@@ -1,4 +1,5 @@
 #include <IoTdeviceLib.h>
+#include "DHTesp.h" // Click here to get the library: http://librarymanager/All#DHTesp
 
 //------ SECCION DE LECTURA Y CONVERSION DIGITAL DE SENSORES ---------- 
 float LeerTemperatura(int temperaturapin, TipoSensor ts, float tension)
@@ -36,6 +37,15 @@ float LeerTemperatura(int temperaturapin, TipoSensor ts, float tension)
     case GroveTmp:        
         //Lee estado de sensor de Temperatura para GROVE temp
         temperatura=1/(log(resistance/10000)/B+1/298.15)-273.15; //Calculo de la temperatura
+        break;
+
+    case dht:
+        DHTesp dht;
+        dht.setup(temperaturapin, DHTesp::DHT11); // Connect DHT
+         //Lee estado de sensor DHT11
+        temperatura = dht.getTemperature();
+        break;
+
     default:
         break;
     }
