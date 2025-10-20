@@ -1,14 +1,16 @@
 //Este skecht se ha desarrollado para activar el bombillo a partir del umbral
 //también el ventilador cuando la temperatura suba por encima de cierto umbral
 #include "Arduino.h"
+#include "DHTesp.h" // Click here to get the library: http://librarymanager/All#DHTesp
+
 //*************** Coneción a ThinkSpeak *********
 #include <ThingSpeak.h>
 
 // Información del Canal y Campos de ThingSpeak
 char thingSpeakAddress[] = "api.thingspeak.com";
-unsigned long channelID = 1971876;
-char* readAPIKey = (char*)"CINKHYK8DSHZ1UM4";
-char* writeAPIKey = (char*)"VAY71QPOWPWSG4VU";
+unsigned long channelID = 3094713;
+char* readAPIKey = (char*)"N1GUYGW9Q6G5HKNX";
+char* writeAPIKey = (char*)"FOW8AZ8WE21JPEKG";
 const unsigned long postingInterval = 20L * 1000L;
 unsigned int dataFieldOne = 1;                       // Calpo para escribir el estado de la temperatura
 unsigned int dataFieldTwo = 2;                       // Campo para escribir el estado del bombillo
@@ -25,22 +27,24 @@ WiFiClient client;              //Cliente Wifi para ThingSpeak
 //-------------------------- Fin Configuración WIFI ESP32 --------------
 
 //Entradas digitales del ESP 32
-const int bombillopin = 18;     //Simulado con un led rojo
-const int ventiladorpin =19;   //Simulado con un led azul
+const int bombillopin = 19;     //Simulado con un led rojo
+const int ventiladorpin =18;   //Simulado con un led azul
+const int temperaturapin = 14;  //Temperatura DHT11
 
 //Entradas Analogas del ESP 32
-const int temperaturapin = 36;  //Temperatura TMP36 
-const int potenciometro = 39;   //Poteciometro para ejemplo PWM
-const int sensorluzpin = 35;    //Fotocelda que 
+
+const int potenciometro = 34;   //Poteciometro para ejemplo PWM
+const int sensorluzpin = 39;    //Fotocelda que 
  
 
 //Variables Globales
-int umbralLuz = 500;            //Es el umbral en el cual se enciende el bombillo
-int umbralTemperatura = 20;     //Es el umbral en el cual se enciende el ventilador
+int umbralLuz = 1800;            //Es el umbral en el cual se enciende el bombillo
+int umbralTemperatura = 26;     //Es el umbral en el cual se enciende el ventilador
 float luminosidad;              //Toma el valor en voltaje
 float temperatura;              //Toma el valor en grados
 boolean estadoventilador=false; //false = apagado
 boolean estadobombillo = false; //false = apagado
+DHTesp dht;
 
 //Métodos para encapsular las funcionalidades
 //Simular lectura de fotocelda 
@@ -54,23 +58,23 @@ void LeerSensores(void)
 {
    //leer el sensor de luz
    luminosidad = analogRead(sensorluzpin); 
-   //luminosidad = fotoceldafuncion();
 
-    //recibe la temperatura para el sensor LM35
+   //recibe la temperatura para el sensor LM35
    //temperatura = analogRead(temperaturapin);   
    //temperatura = (5.0 * temperatura * 100.0)/1024.0; 
 
-   //recibe la temperatura de un sensor TMP36
-   int reading = analogRead(temperaturapin);  
-   float voltage = (reading * 3.3) / 4095.0;
-   Serial.print(voltage); Serial.println(" volts");
-   temperatura = (voltage - 0.5) * 100.0; 
-   //temperatura = (temperatura - 0.5 ) * 100;
+   //Then, we read the temperature sensor on pin 17
+   // temperatura = (analogRead(temperaturapin) * (3300 / 1024));  
+   // temperatura = (temperatura - 500) / 10;
+ 
    //Lee estado de sensor de Temperatura para GROVE temp
    //int B=3975; //Valor del termistor
    //temperatura = analogRead(temperaturapin); //Obtencion del valor leido
    //float resistance=(float)(1023-temperatura)*10000/temperatura; //Obtencion del valor de la resistencia
    //temperatura=1/(log(resistance/10000)/B+1/298.15)-273.15; //Calculo de la temperatura
+
+   //Lee estado de sensor DHT11
+   temperatura = dht.getTemperature();
 }
 
 void ImprimirValoresSensores(void)
@@ -193,8 +197,8 @@ void setup()
     ThingSpeak.begin( client );
   //************ Fin Conectar Cliente ThingSpeak ***
   
-  //Inicializar el generador de numeros aleatorios
-  randomSeed(analogRead(0));
+  //Inicializar la libreria de temperatura y humedad DHT11
+  dht.setup(temperaturapin, DHTesp::DHT11); // Connect DHT sensor to GPIO 16
 }
 
 //metodo repetitivo
