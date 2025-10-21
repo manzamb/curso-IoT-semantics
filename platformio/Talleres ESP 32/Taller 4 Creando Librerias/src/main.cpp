@@ -6,23 +6,22 @@
 #include <IoTdeviceLib.h>       //Librería con funciones de sensor - actuador
 #include <IoTcomLib.h>          //Librería con funciones de comunicación del dispositivo
 #include <DNSServer.h>          //Es necesario instalar la librería EspSoftwareSerial y Wifimanager 
-//#include <ESP8266WebServer.h>
 #include <WiFiManager.h>
 
 //-------------------------- Fin Configuración WIFI ESP32 --------------
 
 //Entradas digitales del ESP 32
-const int bombillopin = 18;     //Simulado con un led rojo
-const int ventiladorpin =19;   //Simulado con un led azul
+const int bombillopin = 19;     //Simulado con un led rojo
+const int ventiladorpin =18;   //Simulado con un led azul
+const int temperaturapin = 26;  //Temperatura DHT11
 
 //Entradas Analogas del ESP 32
-const int temperaturapin = 36;  //Temperatura TMP36 
-const int potenciometro = 39;   //Poteciometro para ejemplo PWM
-const int sensorluzpin = 35;    //Fotocelda que 
+const int potenciometro = 34;   //Poteciometro para ejemplo PWM
+const int sensorluzpin = 39;    //Fotocelda que 
 
 //Variables Globales
-int umbralLuz = 500;                                //Es el umbral en el cual se enciende el bombillo
-int umbralTemperatura = 28;                         //Es el umbral en el cual se enciende el ventilador
+int umbralLuz = 1800;                                //Es el umbral en el cual se enciende el bombillo
+int umbralTemperatura = 26;                         //Es el umbral en el cual se enciende el ventilador
 float luminosidad;                                  //Toma el valor en voltaje
 float temperatura;                                  //Toma el valor en grados
 boolean estadoventilador =false;                    //false = apagado
@@ -64,7 +63,11 @@ void setup()
   pinMode(temperaturapin, INPUT);
 
   //inicializar aqui thingspeak
-  InicializarThingSpeak();
+  // Use mutable char arrays to avoid converting string literal to 'char*'
+  static char thingSpeakApiKey[] = "N1GUYGW9Q6G5HKNX";
+  static char thingSpeakWriteKey[] = "FOW8AZ8WE21JPEKG";
+  unsigned int thingSpeakChannelID = 3094713;
+  InicializarThingSpeak(thingSpeakApiKey, thingSpeakWriteKey, thingSpeakChannelID);
 }
 
 void loop()                    
@@ -74,7 +77,7 @@ void loop()
       lastUpdateTime = millis();
 
       //LeerSensores
-      temperatura = LeerTemperatura(temperaturapin,Tmp36,3.3);
+      temperatura = LeerTemperatura(temperaturapin,dht,5.0);
       luminosidad = LeerLuminosidad(sensorluzpin);
 
       //Imprimir Valores Sensores y Actuadores 
@@ -96,6 +99,6 @@ void loop()
       EnviarThingSpeakVariosDatos(1 , temperatura , 
                                   2 , estadobombillo,
                                   3 , estadoventilador,
-                                  4, millis());     
+                                  4, luminosidad);     
     }
 }

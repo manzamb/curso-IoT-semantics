@@ -1,5 +1,8 @@
 #include <IoTdeviceLib.h>
-#include "DHTesp.h" // Click here to get the library: http://librarymanager/All#DHTesp
+#include <WiFi.h>
+#include <SoftwareSerial.h>
+#include <math.h>
+#include "DHTesp.h"
 
 //------ SECCION DE LECTURA Y CONVERSION DIGITAL DE SENSORES ---------- 
 float LeerTemperatura(int temperaturapin, TipoSensor ts, float tension)
