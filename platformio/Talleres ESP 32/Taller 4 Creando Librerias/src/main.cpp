@@ -21,7 +21,7 @@ const int sensorluzpin = 39;    //Fotocelda que
 
 //Variables Globales
 int umbralLuz = 1800;                                //Es el umbral en el cual se enciende el bombillo
-int umbralTemperatura = 26;                         //Es el umbral en el cual se enciende el ventilador
+int umbralTemperatura = 24;                         //Es el umbral en el cual se enciende el ventilador
 float luminosidad;                                  //Toma el valor en voltaje
 float temperatura;                                  //Toma el valor en grados
 boolean estadoventilador =false;                    //false = apagado
