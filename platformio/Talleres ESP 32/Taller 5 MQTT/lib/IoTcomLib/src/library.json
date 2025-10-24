@@ -1,0 +1,11 @@
+{
+  "name": "IoTcomLib",
+  "version": "1.0.0",
+  "author": "Miguel Ángel Niño",
+  "license": "MIT",
+  "frameworks": ["arduino"],
+  "dependencies": [
+    { "name": "mathworks/ThingSpeak", "version": "^2.0.0" },
+    { "name": "WiFi" }
+  ]
+}

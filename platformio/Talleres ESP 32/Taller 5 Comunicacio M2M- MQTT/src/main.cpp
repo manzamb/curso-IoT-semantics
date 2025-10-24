@@ -7,20 +7,21 @@
 //#include <IoTcomLib.h>          //Librería con funciones de comunicación del dispositivo
 #include <DNSServer.h>          //Es necesario instalar la librería EspSoftwareSerial y Wifimanager 
 #include <WiFiManager.h>
+#include <PubSubClient.h>
 
 //-------------------------- Fin Configuración WIFI ESP32 --------------
 
 //Entradas digitales del ESP 32
-const int bombillopin = 18;     //Simulado con un led rojo
-const int ventiladorpin =19;   //Simulado con un led azul
+const int bombillopin = 19;     //Simulado con un led rojo
+const int ventiladorpin =18;   //Simulado con un led azul
+const int temperaturapin = 26;  //Temperatura TMP36 
 
 //Entradas Analogas del ESP 32
-const int temperaturapin = 36;  //Temperatura TMP36 
 const int potenciometro = 39;   //Poteciometro para ejemplo PWM
-const int sensorluzpin = 35;    //Fotocelda que 
+const int sensorluzpin = 39;    //Fotocelda que 
 
 //Variables Globales
-int umbralLuz = 500;                                //Es el umbral en el cual se enciende el bombillo
+int umbralLuz = 1800;                                //Es el umbral en el cual se enciende el bombillo
 int umbralTemperatura = 28;                         //Es el umbral en el cual se enciende el ventilador
 float luminosidad;                                  //Toma el valor en voltaje
 float temperatura;                                  //Toma el valor en grados
@@ -32,8 +33,6 @@ unsigned long lastConnectionTime = 0;               //Para controlar el tiempo d
 long lastUpdateTime = 0;                            //Momento de la última actualización
 
 //************************ Configurar MQTT ************************
-#include <PubSubClient.h>
-#include <WiFi.h>
 
 //Parametros para los mensajes MQTT
 WiFiClient espClient;
@@ -45,8 +44,8 @@ int value = 0;
 //Broquer MQTT
 //const char* mqtt_server = "iot.eclipse.org";
 //Servidor en la ORANGEPi
-//const char* mqtt_server ="192.168.68.112";
-const char* mqtt_server = "192.168.211.77";
+const char* mqtt_server ="test.mosquitto.org";
+//const char* mqtt_server = "192.168.211.88";
 //const char* mqtt_server ="test.mosquitto.org";
 
 void callback(char* topic, byte* payload, unsigned int length) {
