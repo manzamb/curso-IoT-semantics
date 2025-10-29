@@ -27,9 +27,17 @@ float temperatura;                                  //Toma el valor en grados
 boolean estadoventilador =false;                    //false = apagado
 boolean estadobombillo = false;                     //false = apagado
 int nummedicion = 0;                                //Establece el número consecutivo de observacion hecha
-const unsigned long postingInterval = 20L * 1000L;  //Establece cada cuanto se envia a ThingSpeak
+const unsigned long postingInterval = 5L * 1000L;  //Establece cada cuanto se envia a ThingSpeak
 unsigned long lastConnectionTime = 0;               //Para controlar el tiempo de generar nueva medición
 long lastUpdateTime = 0;                            //Momento de la última actualización
+
+//Variables del Servidor MQTT
+int pinOnOff = 5;                                   //Pin para controlar el actuador via MQTT
+float sensorValue = 0.0;                            //Valor del sensor para publicar via MQTT 
+char* mqtt_server ="test.mosquitto.org";            //Dirección del servidor MQTT
+char msg[50];                                       //Mensaje a publicar
+//char* mqtt_server = "192.168.211.88";
+
 
 //metodo cliente para controlar los eventos R1 y R2
 void setup()
@@ -62,16 +70,27 @@ void setup()
   pinMode(ventiladorpin, OUTPUT);
   pinMode(temperaturapin, INPUT);
 
+  /*
   //inicializar aqui thingspeak
-  // Use mutable char arrays to avoid converting string literal to 'char*'
+  //Use mutable char arrays to avoid converting string literal to 'char*'
   static char thingSpeakApiKey[] = "N1GUYGW9Q6G5HKNX";
   static char thingSpeakWriteKey[] = "FOW8AZ8WE21JPEKG";
   unsigned int thingSpeakChannelID = 3094713;
   InicializarThingSpeak(thingSpeakApiKey, thingSpeakWriteKey, thingSpeakChannelID);
+  */
+
+   //Inicializar el canal MQTT
+   MQTTsetup(mqtt_server);
 }
 
 void loop()                    
 {
+  //Conectarse al servidor MQTT
+  MQTTloop();
+
+  //Suscribirse a los topicos de interes MQTT
+  SucribirseMQTT((char*)"accionLed");
+
   // Solamente actualiza si el tiempo de publicación es excedido
   if (millis() - lastUpdateTime >=  postingInterval) {
       lastUpdateTime = millis();
@@ -95,10 +114,46 @@ void loop()
       Serial.println("========================================");
 
       //Enviar los Datos a ThinkSpeak
-      
+      /*
       EnviarThingSpeakVariosDatos(1 , temperatura , 
                                   2 , estadobombillo,
                                   3 , estadoventilador,
-                                  4, luminosidad);     
-    }
+                                  4, luminosidad); 
+      */
+                                  
+      //Enviar los datos al servidor MQTT
+      
+      //Publicar la temperatura
+      snprintf (msg, 75, "%f", temperatura);
+      Serial.print("Publicando temperatura en el Servidor MQTT: ");
+      Serial.println(msg);
+      PublicarMQTTMensaje((char*)"TemperaturaSalida", msg);
+
+      //Publicar el Estado del Ventilador
+      snprintf (msg, 75, "%i", estadoventilador);
+      Serial.print("Publicando el estado del ventilador en el Servidor MQTT: ");
+      Serial.println(msg);
+      PublicarMQTTMensaje((char*)"ventiladorSalida", msg);
+
+      //Publicar la luminosidad actual
+      Serial.println(luminosidad);
+      snprintf (msg, 75, "%f", luminosidad);
+      Serial.print("Publicando la luminosidad en el Servidor MQTT: ");
+      Serial.println(msg);
+      PublicarMQTTMensaje((char*)"luminosidadSalida", msg);
+
+      //Publicar el estado del bombillo
+      snprintf (msg, 75, "%i", estadobombillo);
+      Serial.print("Publicando el estado del bombillo en el Servidor MQTT: ");
+      Serial.println(msg);
+      PublicarMQTTMensaje((char*)"bombilloSalida", msg);   
+
+      //Cambiar el estado del actuador via MQTT
+      if (isMqttCallback()){
+        //Se hace el flag en false para no repetir la acción 
+        setCallbackFlag(false); //Resetear el flag
+        //Realiza las acciones para todos los topicos suscritos
+        switchMQTT((char*)"accionLed", pinOnOff, msg);
+      }
+  }
 }

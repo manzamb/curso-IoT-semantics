@@ -37,9 +37,9 @@ long lastUpdateTime = 0;                            //Momento de la última actu
 //Parametros para los mensajes MQTT
 WiFiClient espClient;
 PubSubClient client(espClient);
-long lastMsg = 0;
+//long lastMsg = 0;
 char msg[50];
-int value = 0;
+//int value = 0;
 
 //Broquer MQTT
 //const char* mqtt_server = "iot.eclipse.org";

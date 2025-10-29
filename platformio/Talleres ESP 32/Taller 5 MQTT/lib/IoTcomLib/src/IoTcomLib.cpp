@@ -77,15 +77,28 @@ int EnviarThingSpeakVariosDatos(
 //************************ Configurar MQTT ************************
 //Parametros para los mensajes MQTT
 WiFiClient espClient;
-PubSubClient client(espClient);
-long lastMsg = 0;
-char msg[50];
-int value = 0;
+PubSubClient mqttClient(espClient);
+boolean mqttCallback = false;
+char* topicReceibed;
+char* payloadReceibed;
 
-//Broquer MQTT
-const char* mqtt_server = "192.168.211.77";
-//const char* mqtt_server ="test.mosquitto.org";
+//Configuración del servidor MQTT
+//mqtt_server_address: dirección IP del servidor MQTT
+void MQTTsetup(char* mqtt_server_address) {
+  mqttClient.setServer(mqtt_server_address, 1883);
+  mqttClient.setCallback(callback);
+}
 
+//Conectandose al servidor MQTT
+void MQTTloop() {
+  // Loop until we're reconnected
+  if (!mqttClient.connected()) {
+    reconnect();
+  }
+  mqttClient.loop();
+}
+
+//Callback que se ejecuta al recibir un mensaje MQTT
 void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Mensaje recibido [");
   Serial.print(topic);
@@ -94,43 +107,59 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.print((char)payload[i]);
   }
   Serial.println();
-
-  // Switch on the LED if an 0 was received as first character
-  if ((char)payload[0] == '0') {
-    digitalWrite(bombillopin, LOW);   // Turn the LED on (Note that LOW is the voltage level
-    // but actually the LED is on; this is because
-    // it is acive low on the ESP-01)
-  } else {
-    digitalWrite(bombillopin, HIGH);  // Turn the LED off by making the voltage HIGH
-  }
-
+  //Establecer que se ejecuto Callback MQTT
+  mqttCallback = true;
+  topicReceibed = topic;
+  payloadReceibed = (char*)payload;
 }
 
+boolean isMqttCallback(){
+  return mqttCallback;
+}
+
+void setCallbackFlag(boolean flag){
+  mqttCallback = flag;
+}
+
+//Función para reconectarse al servidor MQTT
 void reconnect() {
   // Loop until we're reconnected
-  while (!client.connected()) {
+  while (!mqttClient.connected()) {
     Serial.print("Intentando conexión MQTT...");
     String clientId = "ESP32Client-";
     clientId += String(random(0xffff), HEX);
     // Attempt to connect
-    if (client.connect(clientId.c_str())) {
+    if (mqttClient.connect(clientId.c_str())) {
+      // Once connected, publish an announcement
       Serial.println("conectado");
-      // Once connected, publish an announcement...
-      if (temperatura > 0){
-        snprintf (msg, 75, "%f", temperatura);
-        client.publish("temperaturaSalida",msg);
-        Serial.println("enviando...");
-        Serial.println(msg);
-      }
-      // ... and resubscribe
-      client.subscribe("accionLed");
     } else {
       Serial.print("failed, rc=");
-      Serial.print(client.state());
+      Serial.print(mqttClient.state());
       Serial.println(" try again in 5 seconds");
       // Wait 5 seconds before retrying
       delay(5000);
     }
   }
 }
+
+//Publicar mensaje MQTT
+void PublicarMQTTMensaje(char* topic, char* message){
+    mqttClient.publish(topic, message);
+}
+
+//Suscribirse a un topico  MQTT
+void SucribirseMQTT(char* topic){
+    mqttClient.subscribe(topic);
+}
+
+//Funciones para controlar sensores y actuadores via MQTT se pueden agregar aquí
+void switchMQTT(char* topic, int pinOnOff, char* payload){
+  //Código para controlar sensores y actuadores via MQTT
+  // Switch on the LED if an 0 was received as first character
+  if ((char)payload[0] == '0') {
+    digitalWrite(pinOnOff, LOW);   // Turn the pin on (Note that LOW is the voltage level
+    } else {
+    digitalWrite(pinOnOff, HIGH);  // Turn the pin off by making the voltage HIGH
+  }
+} 
 //********************* FIN Configurarción MQTT ************************

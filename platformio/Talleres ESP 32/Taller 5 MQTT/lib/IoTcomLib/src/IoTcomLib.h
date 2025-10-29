@@ -3,7 +3,6 @@
 #ifndef _IoTcomLib
 #define _IoTcomLib
 
-
 //------------------- FUNCIONES PARA CONECTAR A LA RED ---------------------
 /**
  * @brief Permite conectar el ESP a la Red, dependiendo de los parámetros
@@ -52,8 +51,14 @@ int EnviarThingSpeakVariosDatos( unsigned int TSField1,
                   unsigned int TSField3, long field3Data ,
                   unsigned int TSField4, long field4Data );
 
-#endif
-
 ////------------------- FUNCIONES PARA CONECTAR A SERVIDOR MQTT ---------------------
+void MQTTsetup(char* mqtt_server_address);
+void MQTTloop();
 void callback(char* topic, byte* payload, unsigned int length);
 void reconnect();
+void PublicarMQTTMensaje(char* topic, char* message);
+void SucribirseMQTT(char* topic);
+void switchMQTT(char* topic, int pinOnOff, char* payload);
+boolean isMqttCallback();
+void setCallbackFlag(boolean flag);
+#endif
