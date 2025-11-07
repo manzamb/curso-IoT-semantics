@@ -34,9 +34,9 @@ long lastUpdateTime = 0;                            //Momento de la última actu
 //Variables del Servidor MQTT
 int pinOnOff = 5;                                   //Pin para controlar el actuador via MQTT
 float sensorValue = 0.0;                            //Valor del sensor para publicar via MQTT 
-char* mqtt_server ="test.mosquitto.org";            //Dirección del servidor MQTT
+//char mqtt_server[50] ="test.mosquitto.org";         //Dirección del servidor MQTT
+char mqtt_server[50] ="192.168.211.86";             //Dirección del servidor MQTT
 char msg[50];                                       //Mensaje a publicar
-//char* mqtt_server = "192.168.211.88";
 
 
 //metodo cliente para controlar los eventos R1 y R2
