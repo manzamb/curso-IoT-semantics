@@ -13,7 +13,7 @@
 //Entradas digitales del ESP 32
 const int bombillopin = 19;     //Simulado con un led rojo
 const int ventiladorpin =18;   //Simulado con un led azul
-const int temperaturapin = 26;  //Temperatura DHT11
+const int temperaturapin = 26;  //Temperatura DHT11. 
 
 //Entradas Analogas del ESP 32
 const int potenciometro = 34;   //Poteciometro para ejemplo PWM
@@ -34,8 +34,8 @@ long lastUpdateTime = 0;                            //Momento de la última actu
 //Variables del Servidor MQTT
 int pinOnOff = 5;                                   //Pin para controlar el actuador via MQTT
 float sensorValue = 0.0;                            //Valor del sensor para publicar via MQTT 
-//char mqtt_server[50] ="test.mosquitto.org";         //Dirección del servidor MQTT
-char mqtt_server[50] ="192.168.211.86";             //Dirección del servidor MQTT
+char mqtt_server[50] ="test.mosquitto.org";         //Dirección del servidor MQTT
+//char mqtt_server[50] ="192.168.211.86";             //Dirección del servidor MQTT
 char msg[50];                                       //Mensaje a publicar
 
 
