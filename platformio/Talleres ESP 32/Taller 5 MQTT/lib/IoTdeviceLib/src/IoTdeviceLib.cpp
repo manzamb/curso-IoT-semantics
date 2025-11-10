@@ -69,9 +69,9 @@ int LeerLuminosidad(int luminosidadPin)
     //Dado que se esta comn un ESP y no hay más puertos analogicos se simulatura
     //Simular lectura de fotocelda 
 
-    float luminosidad = fotoceldafuncion(luminosidadPin);
+    //float luminosidad = fotoceldafuncion(luminosidadPin);
 
-    //float luminosidad = analogRead(luminosidadPin);
+    float luminosidad = analogRead(luminosidadPin);
     return luminosidad;
 }
 

@@ -110,7 +110,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   //Establecer que se ejecuto Callback MQTT
   mqttCallback = true;
   topicReceibed = topic;
-  payloadReceibed = (char*)payload;
+  payloadReceibed = (char*) payload;
 }
 
 boolean isMqttCallback(){
@@ -153,10 +153,11 @@ void SucribirseMQTT(char* topic){
 }
 
 //Funciones para controlar sensores y actuadores via MQTT se pueden agregar aquí
-void switchMQTT(char* topic, int pinOnOff, char* payload){
+void switchMQTT(char* topic, int pinOnOff){
+//void switchMQTT(char* topic, int pinOnOff, char* payload){
   //Código para controlar sensores y actuadores via MQTT
   // Switch on the LED if an 0 was received as first character
-  if ((char)payload[0] == '0') {
+  if (topicReceibed == topic && (char)payloadReceibed[0] == '0') {
     digitalWrite(pinOnOff, LOW);   // Turn the pin on (Note that LOW is the voltage level
     } else {
     digitalWrite(pinOnOff, HIGH);  // Turn the pin off by making the voltage HIGH

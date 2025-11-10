@@ -182,7 +182,6 @@ void loop()
       client.publish("ventiladorSalida", msg);
 
       //Publicar la luminosidad actual
-      Serial.println(luminosidad);
       snprintf (msg, 75, "%f", luminosidad);
       Serial.print("Publicando la luminosidad en el Servidor MQTT: ");
       Serial.println(msg);

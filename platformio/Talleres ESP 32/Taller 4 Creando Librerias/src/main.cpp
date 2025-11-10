@@ -63,7 +63,7 @@ void setup()
   pinMode(temperaturapin, INPUT);
 
   //inicializar aqui thingspeak
-  // Use mutable char arrays to avoid converting string literal to 'char*'
+  //Use mutable char arrays to avoid converting string literal to 'char*'
   static char thingSpeakApiKey[] = "N1GUYGW9Q6G5HKNX";
   static char thingSpeakWriteKey[] = "FOW8AZ8WE21JPEKG";
   unsigned int thingSpeakChannelID = 3094713;

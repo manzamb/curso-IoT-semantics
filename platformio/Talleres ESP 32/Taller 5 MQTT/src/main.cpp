@@ -11,17 +11,17 @@
 //-------------------------- Fin Configuración WIFI ESP32 --------------
 
 //Entradas digitales del ESP 32
-const int bombillopin = 19;     //Simulado con un led rojo
-const int ventiladorpin =18;   //Simulado con un led azul
+const int bombillopin = 19;     //Simulado con un led azul
+const int ventiladorpin =18;   //Simulado con un led rojo
 const int temperaturapin = 26;  //Temperatura DHT11. 
 
 //Entradas Analogas del ESP 32
 const int potenciometro = 34;   //Poteciometro para ejemplo PWM
-const int sensorluzpin = 36;    //Fotocelda que 
+const int sensorluzpin = 39;    //Fotocelda
 
 //Variables Globales
-int umbralLuz = 1800;                                //Es el umbral en el cual se enciende el bombillo
-int umbralTemperatura = 26;                         //Es el umbral en el cual se enciende el ventilador
+int umbralLuz = 200;                               //Es el umbral en el cual se enciende el bombillo
+int umbralTemperatura = 23;                         //Es el umbral en el cual se enciende el ventilador
 float luminosidad;                                  //Toma el valor en voltaje
 float temperatura;                                  //Toma el valor en grados
 boolean estadoventilador =false;                    //false = apagado
@@ -34,8 +34,8 @@ long lastUpdateTime = 0;                            //Momento de la última actu
 //Variables del Servidor MQTT
 int pinOnOff = 5;                                   //Pin para controlar el actuador via MQTT
 float sensorValue = 0.0;                            //Valor del sensor para publicar via MQTT 
-char mqtt_server[50] ="test.mosquitto.org";         //Dirección del servidor MQTT
-//char mqtt_server[50] ="192.168.211.86";             //Dirección del servidor MQTT
+//char mqtt_server[50] ="test.mosquitto.org";         //Dirección del servidor MQTT
+char mqtt_server[50] ="192.168.211.86";             //Dirección del servidor MQTT
 char msg[50];                                       //Mensaje a publicar
 
 
@@ -47,10 +47,10 @@ void setup()
 
   // Resolución Sensores ADC
   //Resolucion de los puesrtos ADC
-  analogReadResolution(12);
-  analogSetPinAttenuation(sensorluzpin, ADC_11db); // Rango ~0-3.3V
+  //analogReadResolution(12); // Resolución de 12 bits (0-4095)
+  //analogSetPinAttenuation(sensorluzpin, ADC_11db); // Rango ~0-3.3V
   
-  //ConectarRed("Redmi","Marcus336");  //Conectar con datos desde el programa
+  //ConectarRed("sumothings","sum0th1ns@manzamb");  //Conectar con datos desde el programa
   //-----Comando para Conectarse y configurar desde el Celular--------
   // Creamos una instancia de la clase WiFiManager
   WiFiManager wifiManager;
@@ -70,15 +70,6 @@ void setup()
   pinMode(bombillopin, OUTPUT);
   pinMode(ventiladorpin, OUTPUT);
   pinMode(temperaturapin, INPUT);
-
-  /*
-  //inicializar aqui thingspeak
-  //Use mutable char arrays to avoid converting string literal to 'char*'
-  static char thingSpeakApiKey[] = "N1GUYGW9Q6G5HKNX";
-  static char thingSpeakWriteKey[] = "FOW8AZ8WE21JPEKG";
-  unsigned int thingSpeakChannelID = 3094713;
-  InicializarThingSpeak(thingSpeakApiKey, thingSpeakWriteKey, thingSpeakChannelID);
-  */
 
    //Inicializar el canal MQTT
    MQTTsetup(mqtt_server);
@@ -113,14 +104,6 @@ void loop()
       estadobombillo = UmbralMenorDeSensorActuador(luminosidad,umbralLuz,bombillopin);
       ImprimirEstadoActuador(bombillopin,"Bobillo Sala");
       Serial.println("========================================");
-
-      //Enviar los Datos a ThinkSpeak
-      /*
-      EnviarThingSpeakVariosDatos(1 , temperatura , 
-                                  2 , estadobombillo,
-                                  3 , estadoventilador,
-                                  4, luminosidad); 
-      */
                                   
       //Enviar los datos al servidor MQTT
       
@@ -137,7 +120,6 @@ void loop()
       PublicarMQTTMensaje((char*)"ventiladorSalida", msg);
 
       //Publicar la luminosidad actual
-      Serial.println(luminosidad);
       snprintf (msg, 75, "%f", luminosidad);
       Serial.print("Publicando la luminosidad en el Servidor MQTT: ");
       Serial.println(msg);
@@ -153,8 +135,8 @@ void loop()
       if (isMqttCallback()){
         //Se hace el flag en false para no repetir la acción 
         setCallbackFlag(false); //Resetear el flag
-        //Realiza las acciones para todos los topicos suscritos
-        switchMQTT((char*)"accionLed", pinOnOff, msg);
+        //Realiza las acciones para todos los topicos suscritos -pinonoff
+        switchMQTT((char*)"accionLed", bombillopin);
       }
   }
 }

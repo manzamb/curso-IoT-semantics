@@ -58,7 +58,7 @@ void callback(char* topic, byte* payload, unsigned int length);
 void reconnect();
 void PublicarMQTTMensaje(char* topic, char* message);
 void SucribirseMQTT(char* topic);
-void switchMQTT(char* topic, int pinOnOff, char* payload);
+void switchMQTT(char* topic, int pinOnOff);
 boolean isMqttCallback();
 void setCallbackFlag(boolean flag);
 #endif
