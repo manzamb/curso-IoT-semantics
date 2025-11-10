@@ -17,18 +17,18 @@ const int ventiladorpin =18;   //Simulado con un led azul
 const int temperaturapin = 26;  //Temperatura TMP36 
 
 //Entradas Analogas del ESP 32
-const int potenciometro = 39;   //Poteciometro para ejemplo PWM
+const int potenciometro = 34;   //Poteciometro para ejemplo PWM
 const int sensorluzpin = 39;    //Fotocelda que 
 
 //Variables Globales
-int umbralLuz = 1800;                                //Es el umbral en el cual se enciende el bombillo
+int umbralLuz = 300;                                //Es el umbral en el cual se enciende el bombillo
 int umbralTemperatura = 28;                         //Es el umbral en el cual se enciende el ventilador
 float luminosidad;                                  //Toma el valor en voltaje
 float temperatura;                                  //Toma el valor en grados
 boolean estadoventilador =false;                    //false = apagado
 boolean estadobombillo = false;                     //false = apagado
 int nummedicion = 0;                                //Establece el número consecutivo de observacion hecha
-const unsigned long postingInterval = 20L * 1000L;  //Establece cada cuanto se envia a ThingSpeak
+const unsigned long postingInterval = 5L * 1000L;  //Establece cada cuanto se envia a ThingSpeak
 unsigned long lastConnectionTime = 0;               //Para controlar el tiempo de generar nueva medición
 long lastUpdateTime = 0;                            //Momento de la última actualización
 
@@ -105,7 +105,8 @@ void setup()
 
   // Resolución Sensores ADC
   //Resolucion de los puesrtos ADC
-  analogReadResolution(10);
+  analogReadResolution(12);
+  analogSetPinAttenuation(sensorluzpin, ADC_11db); // Rango ~0-3.3V
   
   //ConectarRed("Redmi","Marcus336");  //Conectar con datos desde el programa
   //-----Comando para Conectarse y configurar desde el Celular--------
@@ -150,7 +151,7 @@ void loop()
       lastUpdateTime = millis();
 
       //LeerSensores
-      temperatura = LeerTemperatura(temperaturapin,Tmp36,3.3);
+      temperatura = LeerTemperatura(temperaturapin,dht,3.3);
       luminosidad = LeerLuminosidad(sensorluzpin);
 
       //Imprimir Valores Sensores y Actuadores 

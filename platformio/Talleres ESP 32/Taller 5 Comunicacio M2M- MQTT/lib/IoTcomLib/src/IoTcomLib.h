@@ -1,3 +1,5 @@
+#pragma once
+#include <Arduino.h>
 #ifndef _IoTcomLib
 #define _IoTcomLib
 
@@ -21,7 +23,7 @@ void ConectarRed(char ssid[], char password[]);
  * @param writeAPIKey API KEY de ThinkSpeak para escritura
  * @return void 
  */
-void InicializarThingSpeak();
+void InicializarThingSpeak(char* readAPIKey, char* writeAPIKey, unsigned long TSChannel);
 
 /**
  * @brief Permite enviar un dato perticular a ThingSpeak
@@ -51,3 +53,5 @@ int EnviarThingSpeakVariosDatos( unsigned int TSField1,
                   unsigned int TSField4, long field4Data );
 
 #endif
+
+////------------------- FUNCIONES PARA CONECTAR A SERVIDOR MQTT ---------------------

@@ -1,9 +1,10 @@
+#pragma once
+#include <Arduino.h>
 #ifndef _IoTdeviceLib
 #define _IoTdeviceLib
-#include <SoftwareSerial.h>
-#include <math.h>
 
-typedef enum SensorType {GroveTmp, Lm35, Tmp36, Lm35dz} TipoSensor;
+
+typedef enum SensorType {GroveTmp, Lm35, Tmp36, Lm35dz, dht} TipoSensor;
 
 /**
  * @brief Funcion genérica que lee un sensor de temperatura de los

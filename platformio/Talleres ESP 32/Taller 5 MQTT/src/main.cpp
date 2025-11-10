@@ -17,7 +17,7 @@ const int temperaturapin = 26;  //Temperatura DHT11.
 
 //Entradas Analogas del ESP 32
 const int potenciometro = 34;   //Poteciometro para ejemplo PWM
-const int sensorluzpin = 39;    //Fotocelda que 
+const int sensorluzpin = 36;    //Fotocelda que 
 
 //Variables Globales
 int umbralLuz = 1800;                                //Es el umbral en el cual se enciende el bombillo
@@ -47,7 +47,8 @@ void setup()
 
   // Resolución Sensores ADC
   //Resolucion de los puesrtos ADC
-  analogReadResolution(10);
+  analogReadResolution(12);
+  analogSetPinAttenuation(sensorluzpin, ADC_11db); // Rango ~0-3.3V
   
   //ConectarRed("Redmi","Marcus336");  //Conectar con datos desde el programa
   //-----Comando para Conectarse y configurar desde el Celular--------
