@@ -81,7 +81,7 @@ void loop()
   MQTTloop();
 
   //Suscribirse a los topicos de interes MQTT
-  SucribirseMQTT((char*)"accionLed");
+  SucribirseMQTT((char*)"accionLed");  //Topico para controlar el bombillo via MQTT
 
   // Solamente actualiza si el tiempo de publicación es excedido
   if (millis() - lastUpdateTime >=  postingInterval) {
