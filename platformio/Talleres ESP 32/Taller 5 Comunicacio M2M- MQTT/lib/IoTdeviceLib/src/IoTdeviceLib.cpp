@@ -7,9 +7,9 @@
 //------ SECCION DE LECTURA Y CONVERSION DIGITAL DE SENSORES ---------- 
 float LeerTemperatura(int temperaturapin, TipoSensor ts, float tension)
 {
-   //Lee el voltaje reportado por el sensor
-   float temperatura = analogRead(temperaturapin);
-
+   //Valor de la temperatura leida
+    float temperatura =0.0;
+   
    //Variables para un sensor Grove de temperatura
    int B=3975; //Valor del termistor
    float resistance=(float)(1023-temperatura)*10000/temperatura; //Obtencion del valor de la resistencia
@@ -25,19 +25,27 @@ float LeerTemperatura(int temperaturapin, TipoSensor ts, float tension)
     switch (ts)
     {
     case Lm35dz:
+        //Lee el voltaje reportado por el sensor
+        temperatura = analogRead(temperaturapin);
          //recibe la temperatura para el sensor LM35DZ 
         temperatura = (tension/1024.0) * temperatura * 100;    
     case Tmp36:
+        //Lee el voltaje reportado por el sensor
+        temperatura = analogRead(temperaturapin);    
         //recibe la temperatura para el sensor TMP36 
         temperatura = (tension/1024.0) * temperatura * 100 -50; 
         break;
     
     case Lm35:
+         //Lee el voltaje reportado por el sensor
+        temperatura = analogRead(temperaturapin);   
         //recibe la temperatura para el sensor LM35  
         temperatura = (tension * temperatura * 100.0)/1024.0; 
         break;
 
-    case GroveTmp:        
+    case GroveTmp: 
+         //Lee el voltaje reportado por el sensor
+        temperatura = analogRead(temperaturapin);          
         //Lee estado de sensor de Temperatura para GROVE temp
         temperatura=1/(log(resistance/10000)/B+1/298.15)-273.15; //Calculo de la temperatura
         break;
@@ -45,6 +53,8 @@ float LeerTemperatura(int temperaturapin, TipoSensor ts, float tension)
     case dht:
         DHTesp dht;
         dht.setup(temperaturapin, DHTesp::DHT11); // Connect DHT
+         //Lee el voltaje reportado por el sensor
+        temperatura = digitalRead(temperaturapin);       
          //Lee estado de sensor DHT11
         temperatura = dht.getTemperature();
         break;

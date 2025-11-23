@@ -23,7 +23,18 @@
 		{
 			"name": "Taller 5 MQTT - Librerias",
 			"path": "Taller 5 MQTT - Librerias"
+		},
+		{
+			"name": "Taller 6 Servidor Web Objeto Inteligente",
+			"path": "Taller 6 Servidor Web Objeto Inteligente"
 		}
 	],
-	"settings": {}
+	"settings": {},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+		
+		
+		]
+	}
 }
