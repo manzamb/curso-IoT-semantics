@@ -5,6 +5,7 @@
 #include <DNSServer.h>          //Es necesario instalar la librería EspSoftwareSerial y Wifimanager 
 #include <WiFiManager.h>         //Librería para configuración WIFI desde celular
 
+
 //Entradas digitales del ESP 32
 const int bombillopin = 19;     //Simulado con un led azul
 const int ventiladorpin =18;   //Simulado con un led rojo
@@ -67,12 +68,12 @@ void setup() {
 
   // Descomentar para resetear configuración - Hacer el ejercicio con el celular
   // todas las veces.
-  //wifiManager.resetSettings();
+  wifiManager.resetSettings();
 
   // Creamos AP y portal para configurar desde el Celular
   wifiManager.autoConnect("ESP8266Temp");
  
-  Serial.println("!Ya estás conectado¡");
+  //Serial.println("!Ya estás conectado¡");
   //----------- Fin de conección ESP8266 -----------------------------
 
 //Establecer los modos de los puertos
@@ -81,8 +82,13 @@ void setup() {
   pinMode(ventiladorpin, OUTPUT);
   pinMode(temperaturapin, INPUT);
 
-  server.on("/", [](){ server.send(200, "text/html", getPage()); });
+// ---- INICIO SERVIDOR WEB ----
+  server.on("/", []() {
+    server.send(200, "text/html", getPage());
+  });
   server.begin();
+
+  Serial.println("Servidor web iniciado");
 }
 
 void loop() {
