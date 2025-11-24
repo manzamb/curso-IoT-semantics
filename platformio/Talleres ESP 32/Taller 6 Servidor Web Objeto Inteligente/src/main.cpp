@@ -88,6 +88,7 @@ void setup() {
 }
 
 void loop() {
+  // Manejo del servidor web: Atiende peticiones, envia respuestas
   server.handleClient();
 
   // Solamente actualiza si el tiempo de publicación es excedido
