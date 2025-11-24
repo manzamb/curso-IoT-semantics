@@ -1,0 +1,12 @@
+{
+  "name": "IoTdeviceLib",
+  "version": "1.0.0",
+  "author": "Miguel Ángel Niño",
+  "license": "MIT",
+  "frameworks": ["arduino"],
+  "dependencies": [
+    {  "name": "beegee-tokyo/DHT sensor library for ESPx", "version": "^1.19"},
+    { "name": "WiFi" },
+    { "name": "plerup/EspSoftwareSerial", "version": "^8.2.0"}
+  ]
+}
