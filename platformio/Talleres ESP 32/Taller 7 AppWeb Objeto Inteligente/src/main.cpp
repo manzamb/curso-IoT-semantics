@@ -157,7 +157,7 @@ void setup() {
 
   // Resolución Sensores ADC
   //Resolucion de los puesrtos ADC
-  //analogReadResolution(12); // Resolución de 12 bits (0-4095)
+  analogReadResolution(12); // Resolución de 12 bits (0-4095)
   //analogSetPinAttenuation(sensorluzpin, ADC_11db); // Rango ~0-3.3V
   
    //----------- Comando para Conectarse a la WIFI el ESP ---------
