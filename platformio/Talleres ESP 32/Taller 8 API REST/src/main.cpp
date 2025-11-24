@@ -95,6 +95,27 @@ String getPage() {
   return html;
 }
 
+String getStatusJson() {
+  String json = "{";
+
+  json += "\"light\":{";
+  json += "\"luminosity\":" + String(luminosidad) + ",";
+  json += "\"mode\":\"" + String(lightManual ? "MANUAL" : "AUTO") + "\",";
+  json += "\"isOn\":"; 
+  json += (estadobombillo ? "true" : "false");
+  json += "},";
+
+  json += "\"fan\":{";
+  json += "\"temperature\":" + String(temperatura) + ",";
+  json += "\"mode\":\"" + String(fanManual ? "MANUAL" : "AUTO") + "\",";
+  json += "\"isOn\":"; 
+  json += (estadoventilador ? "true" : "false");
+  json += "}";
+
+  json += "}";
+  return json;
+}
+
 // -------- MANEJADORES --------
 void handleRoot() {
   server.send(200, "text/html", getPage());
@@ -150,6 +171,51 @@ void handleNotFound() {
   server.send(404, "text/plain", message);
 }
 
+// Handlers para API REST
+void handleApiStatus() {
+  String json = getStatusJson();
+  server.send(200, "application/json", json);
+}
+
+// Handlers para controlar luz via API REST
+void handleApiLightOn() {
+  lightManual = true;
+  estadobombillo = true;
+  digitalWrite(bombillopin, HIGH);
+  server.send(200, "application/json", getStatusJson());
+}
+
+void handleApiLightOff() {
+  lightManual = true;
+  estadobombillo = false;
+  digitalWrite(bombillopin, LOW);
+  server.send(200, "application/json", getStatusJson());
+}
+
+void handleApiLightAuto() {
+  lightManual = false;
+  server.send(200, "application/json", getStatusJson());
+}
+
+// Handlers para controlar ventilador via API REST
+void handleApiFanOn() {
+  fanManual = true;
+  estadoventilador = true;
+  digitalWrite(ventiladorpin, HIGH);
+  server.send(200, "application/json", getStatusJson());
+}
+
+void handleApiFanOff() {
+  fanManual = true;
+  estadoventilador = false;
+  digitalWrite(ventiladorpin, LOW);
+  server.send(200, "application/json", getStatusJson());
+}
+
+void handleApiFanAuto() {
+  fanManual = false;
+  server.send(200, "application/json", getStatusJson());
+}
 
 //----Programa principal----
 
@@ -184,7 +250,17 @@ void setup() {
   server.on("/fan/off", handleFanOff);
   server.on("/fan/auto", handleFanAuto);
 
-// Handlers para errores
+//Rutas API REST
+  server.on("/api/status", HTTP_GET, handleApiStatus);
+  server.on("/api/light/on", HTTP_GET, handleApiLightOn);
+  server.on("/api/light/off", HTTP_GET, handleApiLightOff);
+  server.on("/api/light/auto", HTTP_GET, handleApiLightAuto);
+
+  server.on("/api/fan/on", HTTP_GET, handleApiFanOn);
+  server.on("/api/fan/off", HTTP_GET, handleApiFanOff);
+  server.on("/api/fan/auto", HTTP_GET, handleApiFanAuto);
+
+  // Handlers para error por el favicon
 server.on("/favicon.ico", []() {
   server.send(204); // 204 = No Content
 });
