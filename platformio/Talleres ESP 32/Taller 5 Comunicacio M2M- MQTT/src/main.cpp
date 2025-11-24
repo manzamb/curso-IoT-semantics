@@ -12,8 +12,8 @@
 //-------------------------- Fin Configuración WIFI ESP32 --------------
 
 //Entradas digitales del ESP 32
-const int bombillopin = 19;     //Simulado con un led rojo
-const int ventiladorpin =18;   //Simulado con un led azul
+const int bombillopin = 19;     //Simulado con un led azul
+const int ventiladorpin =18;   //Simulado con un led rojo
 const int temperaturapin = 26;  //Temperatura TMP36 
 
 //Entradas Analogas del ESP 32
@@ -21,7 +21,7 @@ const int potenciometro = 34;   //Poteciometro para ejemplo PWM
 const int sensorluzpin = 39;    //Fotocelda que 
 
 //Variables Globales
-int umbralLuz = 300;                                //Es el umbral en el cual se enciende el bombillo
+int umbralLuz = 100;                                //Es el umbral en el cual se enciende el bombillo
 int umbralTemperatura = 28;                         //Es el umbral en el cual se enciende el ventilador
 float luminosidad;                                  //Toma el valor en voltaje
 float temperatura;                                  //Toma el valor en grados
@@ -44,8 +44,8 @@ char msg[50];
 //Broquer MQTT
 //const char* mqtt_server = "iot.eclipse.org";
 //Servidor en la ORANGEPi
-const char* mqtt_server ="test.mosquitto.org";
-//const char* mqtt_server = "192.168.211.88";
+//const char* mqtt_server ="test.mosquitto.org";
+const char* mqtt_server = "192.168.211.86";
 //const char* mqtt_server ="test.mosquitto.org";
 
 void callback(char* topic, byte* payload, unsigned int length) {
