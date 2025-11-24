@@ -27,10 +27,6 @@ const unsigned long postingInterval = 5L * 1000L;  //Establece cada cuanto se en
 unsigned long lastConnectionTime = 0;               //Para controlar el tiempo de generar nueva medición
 long lastUpdateTime = 0; 
 
-// -------- UMBRALES --------
-int lightThreshold = 2000;  // Ajustable
-float tempThreshold = 28.0; // Ajustable
-
 // -------- SERVIDOR --------
 WebServer server(80);
 
@@ -68,7 +64,7 @@ void setup() {
 
   // Descomentar para resetear configuración - Hacer el ejercicio con el celular
   // todas las veces.
-  wifiManager.resetSettings();
+  //wifiManager.resetSettings();
 
   // Creamos AP y portal para configurar desde el Celular
   wifiManager.autoConnect("ESP8266Temp");
