@@ -160,20 +160,6 @@ void setup() {
   //analogReadResolution(12); // Resolución de 12 bits (0-4095)
   //analogSetPinAttenuation(sensorluzpin, ADC_11db); // Rango ~0-3.3V
   
-  //ConectarRed("sumothings","sum0th1ns@manzamb");  //Conectar con datos desde el programa
-  //-----Comando para Conectarse y configurar desde el Celular--------
-  // Creamos una instancia de la clase WiFiManager
-  //WiFiManager wifiManager;
-
-  // Descomentar para resetear configuración - Hacer el ejercicio con el celular
-  // todas las veces.
-  //wifiManager.resetSettings();
-
-  //Le decimios al WiFiManager que después de configurar se detenga
-  //wifiManager.setBreakAfterConfig(true);
-  // Creamos AP y portal para configurar desde el Celular
-  //wifiManager.autoConnect("ESP8266Temp");
-
    //----------- Comando para Conectarse a la WIFI el ESP ---------
   ConectarRed(ssid,password);  //Conectar con datos desde el programa
 
