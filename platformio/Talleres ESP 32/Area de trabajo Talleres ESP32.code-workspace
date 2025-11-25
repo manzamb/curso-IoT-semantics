@@ -35,6 +35,10 @@
 		{
 			"name": "Taller 8 API REST",
 			"path": "Taller 8 API REST"
+		},
+		{
+			"name": "Taller 9 Metadatos Web of Things Standar",
+			"path": "Taller 9 Metadatos Web of Things Standar"
 		}
 	],
 	"settings": {},

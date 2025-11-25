@@ -1,7 +1,9 @@
 #include <Arduino.h>
+#include <WiFi.h>
 
 #include <IoTdeviceLib.h>       //Librería con funciones de sensor - actuador
 #include <IoTcomLib.h>          //Librería con funciones de comunicación del dispositivo
+#include <IoMetadada.h>         //Libreria con metadatos Web of Things
 #include <WebServer.h>
 //#include <DNSServer.h>          //Es necesario instalar la librería EspSoftwareSerial y Wifimanager 
 //#include <WiFiManager.h>         //Librería para configuración WIFI desde celular
@@ -39,9 +41,16 @@ char password[] = "sum0th1ngs@manzamb";
 
 // -------- SERVIDOR --------
 WebServer server(80);
+IoMetadada metadata;
 
 // Forward declaration para usar la función antes de definirla
 String getStatusJson();
+IoTServiceState buildServiceState();
+String buildStatusJson(const IoTServiceState& data);
+void syncMetadata();
+void handleWotTd();
+void handleWotBehavior();
+void handleWotAffordances();
 
 String getPage() {
   String html = "<!DOCTYPE html><html><head><meta charset='UTF-8'>";
@@ -139,29 +148,53 @@ String getPage() {
   return html;
 }
 
-String getStatusJson() {
+IoTServiceState buildServiceState() {
+  IoTServiceState current;
+  current.luminosity = luminosidad;
+  current.temperature = temperatura;
+  current.lightOn = estadobombillo;
+  current.fanOn = estadoventilador;
+  current.lightThreshold = umbralLuz;
+  current.fanThreshold = umbralTemperatura;
+  current.lightManual = lightManual;
+  current.fanManual = fanManual;
+  return current;
+}
+
+String buildStatusJson(const IoTServiceState& data) {
   String json = "{";
 
   json += "\"light\":{";
-  json += "\"luminosity\":" + String(luminosidad) + ",";
-  json += "\"mode\":\"" + String(lightManual ? "MANUAL" : "AUTO") + "\",";
+  json += "\"luminosity\":" + String(data.luminosity) + ",";
+  json += "\"mode\":\"" + String(data.lightManual ? "MANUAL" : "AUTO") + "\",";
   json += "\"isOn\":"; 
-  json += (estadobombillo ? "true" : "false");
+  json += (data.lightOn ? "true" : "false");
   json += ",";
-  json += "\"threshold\":" + String(umbralLuz);
-  json += "},";
+  json += "\"threshold\":" + String(data.lightThreshold);
+  json += "}";
 
-  json += "\"fan\":{";
-  json += "\"temperature\":" + String(temperatura) + ",";
-  json += "\"mode\":\"" + String(fanManual ? "MANUAL" : "AUTO") + "\",";
-  json += "\"isOn\":"; 
-  json += (estadoventilador ? "true" : "false");
   json += ",";
-  json += "\"threshold\":" + String(umbralTemperatura);
+  json += "\"fan\":{";
+  json += "\"temperature\":" + String(data.temperature) + ",";
+  json += "\"mode\":\"" + String(data.fanManual ? "MANUAL" : "AUTO") + "\",";
+  json += "\"isOn\":"; 
+  json += (data.fanOn ? "true" : "false");
+  json += ",";
+  json += "\"threshold\":" + String(data.fanThreshold);
   json += "}";
 
   json += "}";
   return json;
+}
+
+void syncMetadata() {
+  metadata.updateState(buildServiceState(), WiFi.localIP());
+}
+
+String getStatusJson() {
+  IoTServiceState current = buildServiceState();
+  metadata.updateState(current, WiFi.localIP());
+  return buildStatusJson(current);
 }
 
 // -------- MANEJADORES --------
@@ -207,77 +240,75 @@ void handleFanAuto() {
   server.send(200, "text/html", getPage());
 }
 
+// Handlers WoT
+void handleWotTd() {
+  Serial.println(" >> Servir /wot/td");
+  server.send(200, "application/td+json", metadata.thingDescription());
+}
+
+void handleWotBehavior() {
+  Serial.println(" >> Servir /wot/behavior");
+  server.send(200, "application/json", metadata.behaviorDescription());
+}
+
+void handleWotAffordances() {
+  Serial.println(" >> Servir /wot/affordances");
+  server.send(200, "application/json", metadata.affordancesDescription());
+}
+
+void setLightOn() {
+  lightManual = true;
+  estadobombillo = true;
+  digitalWrite(bombillopin, HIGH);
+}
+
+void setLightOff() {
+  lightManual = true;
+  estadobombillo = false;
+  digitalWrite(bombillopin, LOW);
+}
+
+void setLightAuto() {
+  lightManual = false;
+}
+
+void setFanOn() {
+  fanManual = true;
+  estadoventilador = true;
+  digitalWrite(ventiladorpin, HIGH);
+}
+
+void setFanOff() {
+  fanManual = true;
+  estadoventilador = false;
+  digitalWrite(ventiladorpin, LOW);
+}
+
+void setFanAuto() {
+  fanManual = false;
+}
+
+void setLightThreshold(int value) {
+  umbralLuz = value;
+}
+
+void setFanThreshold(int value) {
+  umbralTemperatura = value;
+}
+
 void handleNotFound() {
   String uri = server.uri();
-  Serial.print("⚠️ NotFound URI: ");
+  Serial.print("NotFound URI: ");
   Serial.println(uri);
-
+  // Fallback por si la ruta WoT no se registra a tiempo
+  if (uri.startsWith("/wot/td")) { handleWotTd(); return; }
+  if (uri.startsWith("/wot/behavior")) { handleWotBehavior(); return; }
+  if (uri.startsWith("/wot/affordances")) { handleWotAffordances(); return; }
   String message = "Ruta no encontrada\n\n";
   message += "URI: ";
   message += uri;
   message += "\n";
   server.send(404, "text/plain", message);
-}
-
-// Handlers para API REST
-void handleApiStatus() {
-  String json = getStatusJson();
-  server.send(200, "application/json", json);
-}
-
-// Handlers para controlar luz via API REST
-void handleApiLightOn() {
-  lightManual = true;
-  estadobombillo = true;
-  digitalWrite(bombillopin, HIGH);
-  server.send(200, "application/json", getStatusJson());
-}
-
-void handleApiLightOff() {
-  lightManual = true;
-  estadobombillo = false;
-  digitalWrite(bombillopin, LOW);
-  server.send(200, "application/json", getStatusJson());
-}
-
-void handleApiLightAuto() {
-  lightManual = false;
-  server.send(200, "application/json", getStatusJson());
-}
-
-// Handlers para controlar ventilador via API REST
-void handleApiFanOn() {
-  fanManual = true;
-  estadoventilador = true;
-  digitalWrite(ventiladorpin, HIGH);
-  server.send(200, "application/json", getStatusJson());
-}
-
-void handleApiFanOff() {
-  fanManual = true;
-  estadoventilador = false;
-  digitalWrite(ventiladorpin, LOW);
-  server.send(200, "application/json", getStatusJson());
-}
-
-void handleApiFanAuto() {
-  fanManual = false;
-  server.send(200, "application/json", getStatusJson());
-}
-
-// New handlers for threshold update
-void handleApiLightThreshold() {
-  if(server.hasArg("value")) {
-    umbralLuz = server.arg("value").toInt();
-  }
-  server.send(200, "application/json", getStatusJson());
-}
-
-void handleApiFanThreshold() {
-  if(server.hasArg("value")) {
-    umbralTemperatura = server.arg("value").toInt();
-  }
-  server.send(200, "application/json", getStatusJson());
 }
 
 //----Programa principal----
@@ -302,6 +333,9 @@ void setup() {
   pinMode(ventiladorpin, OUTPUT);
   pinMode(temperaturapin, INPUT);
 
+  // Sincroniza metadatos WoT con el estado inicial
+  syncMetadata();
+
 // ---- RUTAS DEL SERVIDOR ----
   server.on("/", handleRoot);
 
@@ -309,21 +343,35 @@ void setup() {
   server.on("/light/off", handleLightOff);
   server.on("/light/auto", handleLightAuto);
 
-  server.on("/fan/on", HTTP_GET,handleFanOn);
+  server.on("/fan/on", handleFanOn);
   server.on("/fan/off", handleFanOff);
   server.on("/fan/auto", handleFanAuto);
 
 //Rutas API REST
-  server.on("/api/status", HTTP_GET, handleApiStatus);
-  server.on("/api/light/on", HTTP_GET, handleApiLightOn);
-  server.on("/api/light/off", HTTP_GET, handleApiLightOff);
-  server.on("/api/light/auto", HTTP_GET, handleApiLightAuto);
-  server.on("/api/light/threshold", HTTP_GET, handleApiLightThreshold);
 
-  server.on("/api/fan/on", HTTP_GET, handleApiFanOn);
-  server.on("/api/fan/off", HTTP_GET, handleApiFanOff);
-  server.on("/api/fan/auto", HTTP_GET, handleApiFanAuto);
-  server.on("/api/fan/threshold", HTTP_GET, handleApiFanThreshold);
+
+  // Alias directos en main por si la libreria no se registra
+  server.on("/wot/td", HTTP_ANY, handleWotTd);
+  server.on("/wot/td/", HTTP_ANY, handleWotTd); // fallback por si el cliente agrega /
+  server.on("/wot/behavior", HTTP_ANY, handleWotBehavior);
+  server.on("/wot/behavior/", HTTP_ANY, handleWotBehavior);
+  server.on("/wot/affordances", HTTP_ANY, handleWotAffordances);
+  server.on("/wot/affordances/", HTTP_ANY, handleWotAffordances);
+
+
+  // Rutas API REST centralizadas en la libreria
+  metadata.registerApi(server,
+                       []() { return getStatusJson(); },
+                       []() { setLightOn(); },
+                       []() { setLightOff(); },
+                       []() { setLightAuto(); },
+                       []() { setFanOn(); },
+                       []() { setFanOff(); },
+                       []() { setFanAuto(); },
+                       [](int value) { setLightThreshold(value); },
+                       [](int value) { setFanThreshold(value); });
+
+
 
   // Handlers para error por el favicon
 server.on("/favicon.ico", []() {
@@ -332,6 +380,8 @@ server.on("/favicon.ico", []() {
   server.onNotFound(handleNotFound); 
 
   //Iniciar el Servidor Web
+  Serial.println("Invocando metadata.begin");
+  metadata.begin(server);
   server.begin();
   Serial.println("Servidor web iniciado");
 }
@@ -366,4 +416,5 @@ void loop() {
       ImprimirEstadoActuador(bombillopin,"Bobillo Sala");
       Serial.println("========================================");
   }
+  syncMetadata();
 }
