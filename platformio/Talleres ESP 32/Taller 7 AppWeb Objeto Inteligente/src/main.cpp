@@ -32,10 +32,10 @@ bool lightManual = false;
 bool fanManual = false;
 
 //Conección WiFi
-//char ssid[] = "sumothings";
-//char password[] = "sum0th1ngs@manzamb";
-char ssid[] = "ROXANA";
-char password[] = "Cata031318";
+char ssid[] = "sumothings";
+char password[] = "sum0th1ngs@manzamb";
+//char ssid[] = "ROXANA";
+//char password[] = "Cata031318";
 
 // -------- SERVIDOR --------
 WebServer server(80);
@@ -65,6 +65,7 @@ String getPage() {
   html += "Estado Bombillo: " + String(estadobombillo ? "ENCENDIDO" : "APAGADO") + "<br><br>";
 
   html += "<form action='/light/on' method='GET' style='display:inline;'>";
+  
   html += "<button class='on' type='submit'>Encender</button></form>";
 
   html += "<form action='/light/off' method='GET' style='display:inline;'>";
