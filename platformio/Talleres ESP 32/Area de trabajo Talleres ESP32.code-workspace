@@ -39,6 +39,10 @@
 		{
 			"name": "Taller 9 Metadatos Web of Things Standar",
 			"path": "Taller 9 Metadatos Web of Things Standar"
+		},
+		{
+			"name": "Taller 10 Ontologias para la IoT",
+			"path": "Taller 10 Ontologias para la IoT"
 		}
 	],
 	"settings": {},

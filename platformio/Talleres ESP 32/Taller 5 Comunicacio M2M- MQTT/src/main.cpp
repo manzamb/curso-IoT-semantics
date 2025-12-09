@@ -45,10 +45,10 @@ char msg[50];
 //const char* mqtt_server = "iot.eclipse.org";
 //Servidor en la ORANGEPi
 //const char* mqtt_server ="test.mosquitto.org";
-const char* mqtt_server = "192.168.211.86";
+const char* mqtt_server = "192.168.127.41";
 //const char* mqtt_server ="test.mosquitto.org";
 
-void callback(char* topic, byte* payload, unsigned int length) {
+/* void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Mensaje recibido [");
   Serial.print(topic);
   Serial.print("] ");
@@ -66,7 +66,59 @@ void callback(char* topic, byte* payload, unsigned int length) {
     digitalWrite(bombillopin, HIGH);  // Turn the LED off by making the voltage HIGH
   }
 
+} */
+int pinUp = bombillopin;            //Tópioco para el bombillo: up
+int pinDown = umbralTemperatura;    //Tópioco para el UmbralTemperatura: Down
+int pinCircle = ventiladorpin;      //Tópioco para el ventilador: circle
+int pinCloseFar = umbralLuz;        //Tópioco para el UmbralLuz: closefar
+
+void callback(char* topic, byte* payload, unsigned int length) {
+  Serial.print("Mensaje recibido [");
+  Serial.print(topic);
+  Serial.print("] ");
+
+  // Convertir el payload a String para manejarlo mejor
+  String message;
+  for (unsigned int i = 0; i < length; i++) {
+    message += (char)payload[i];
+  }
+  Serial.println(message);
+
+  // Elegir el pin según el tópico
+  int selectedPin = -1;
+
+  String t = String(topic);
+
+  if (t == "up") {
+    selectedPin = pinUp;
+  }
+  else if (t == "down") {
+    umbralTemperatura = pinDown - 5;  // Disminuir umbral en 5 grados
+  }
+  else if (t == "circle") {
+    selectedPin = pinCircle;
+  }
+  else if (t == "closefar") {
+    umbralLuz = pinCloseFar + 50;  // Aumentar umbral en 50 unidades
+  }
+
+  // Si no coincide ningún tópico, salir
+  if (selectedPin == -1) {
+    Serial.println("Tópico no reconocido");
+    return;
+  }
+
+  // Encender o apagar según el payload
+  if (message == "0") {
+    digitalWrite(selectedPin, LOW);   // Enciende (activo en LOW)
+    Serial.println(" → Bombillo ON");
+  }
+  else {
+    digitalWrite(selectedPin, HIGH);  // Apaga
+    Serial.println(" → Bombillo OFF");
+  }
 }
+
 
 void reconnect() {
   // Loop until we're reconnected

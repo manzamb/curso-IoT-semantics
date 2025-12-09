@@ -32,8 +32,8 @@ bool lightManual = false;
 bool fanManual = false;
 
 //Conección WiFi
-char ssid[] = "sumothings";
-char password[] = "sum0th1ngs@manzamb";
+char ssid[] = "TP-Link_B520";
+char password[] = "67097135";
 //char ssid[] = "ROXANA";
 //char password[] = "Cata031318";
 

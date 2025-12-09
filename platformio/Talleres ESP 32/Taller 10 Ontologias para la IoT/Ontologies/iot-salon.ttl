@@ -1,0 +1,210 @@
+@prefix :    <http://example.org/iot-salon#> .
+@prefix sosa: <http://www.w3.org/ns/sosa/> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+
+<http://example.org/iot-salon> a owl:Ontology ;
+  rdfs:label "Ontología del Salón Inteligente (basada en SOSA)"@es .
+
+###########
+# CLASES  #
+###########
+
+:CourseProject a owl:Class ;
+  rdfs:label "Proyecto de curso"@es .
+
+:SmartClassroom a owl:Class ;
+  rdfs:subClassOf sosa:FeatureOfInterest ;
+  rdfs:label "Salón inteligente"@es .
+
+:SensorDevice a owl:Class ;
+  rdfs:subClassOf sosa:Sensor ;
+  rdfs:label "Dispositivo sensor"@es .
+
+:ActuatorDevice a owl:Class ;
+  rdfs:subClassOf sosa:Actuator ;
+  rdfs:label "Dispositivo actuador"@es .
+
+:EnvironmentalProperty a owl:Class ;
+  rdfs:subClassOf sosa:ObservableProperty ;
+  rdfs:label "Propiedad ambiental"@es .
+
+:LearningActivity a owl:Class ;
+  rdfs:subClassOf sosa:FeatureOfInterest ;
+  rdfs:label "Actividad de aprendizaje"@es .
+
+#####################
+# PROPIEDADES OBJETO #
+#####################
+
+:belongsToProject a owl:ObjectProperty ;
+  rdfs:domain [ owl:unionOf ( :SmartClassroom :SensorDevice :ActuatorDevice :LearningActivity ) ] ;
+  rdfs:range :CourseProject ;
+  rdfs:label "pertenece al proyecto"@es .
+
+:installedIn a owl:ObjectProperty ;
+  rdfs:domain [ owl:unionOf ( :SensorDevice :ActuatorDevice ) ] ;
+  rdfs:range :SmartClassroom ;
+  rdfs:label "instalado en"@es .
+
+:hasActivity a owl:ObjectProperty ;
+  rdfs:domain :SmartClassroom ;
+  rdfs:range :LearningActivity ;
+  rdfs:label "tiene actividad"@es .
+
+#########################
+# PROPIEDADES DE DATOS  #
+#########################
+
+:hasDeviceId a owl:DatatypeProperty ;
+  rdfs:domain [ owl:unionOf ( :SensorDevice :ActuatorDevice ) ] ;
+  rdfs:range xsd:string ;
+  rdfs:label "identificador del dispositivo"@es .
+
+:hasIPAddress a owl:DatatypeProperty ;
+  rdfs:domain [ owl:unionOf ( :SensorDevice :ActuatorDevice ) ] ;
+  rdfs:range xsd:string ;
+  rdfs:label "dirección IP"@es .
+
+:hasLocationNote a owl:DatatypeProperty ;
+  rdfs:domain :SmartClassroom ;
+  rdfs:range xsd:string ;
+  rdfs:label "nota de ubicación"@es .
+
+:hasProjectCode a owl:DatatypeProperty ;
+  rdfs:domain :CourseProject ;
+  rdfs:range xsd:string ;
+  rdfs:label "código del proyecto"@es .
+
+########################
+# PROPIEDADES AMBIENTALES
+########################
+
+:Temperature a :EnvironmentalProperty ;
+  rdfs:label "Temperatura"@es .
+
+:Humidity a :EnvironmentalProperty ;
+  rdfs:label "Humedad"@es .
+
+:CO2Level a :EnvironmentalProperty ;
+  rdfs:label "Nivel de CO2"@es .
+
+:NoiseLevel a :EnvironmentalProperty ;
+  rdfs:label "Nivel de ruido"@es .
+
+:Illuminance a :EnvironmentalProperty ;
+  rdfs:label "Iluminancia"@es .
+
+:OccupancyStatus a :EnvironmentalProperty ;
+  rdfs:label "Ocupación del salón"@es .
+
+########################
+# INDIVIDUOS DE EJEMPLO
+########################
+
+# Proyecto del curso
+:ProyectoSalonInteligente a :CourseProject ;
+  rdfs:label "Proyecto del curso Salón Inteligente"@es ;
+  :hasProjectCode "IOT-SALON-2025" .
+
+# Salones
+:Aula401 a :SmartClassroom ;
+  rdfs:label "Aula 401"@es ;
+  :hasLocationNote "Edificio principal, tercer piso" ;
+  :belongsToProject :ProyectoSalonInteligente .
+
+:Aula402 a :SmartClassroom ;
+  rdfs:label "Aula 402"@es ;
+  :hasLocationNote "Edificio principal, tercer piso" ;
+  :belongsToProject :ProyectoSalonInteligente .
+
+# Actividades
+:ClaseIoT1 a :LearningActivity ;
+  rdfs:label "Clase de IoT - Sesión 1"@es ;
+  :belongsToProject :ProyectoSalonInteligente .
+
+:Aula401 :hasActivity :ClaseIoT1 .
+
+# Sensores en Aula 401
+:SensorTemp401 a :SensorDevice ;
+  rdfs:label "Sensor de temperatura Aula 401"@es ;
+  :hasDeviceId "ESP32-TEMP-401" ;
+  :hasIPAddress "192.168.0.10" ;
+  :installedIn :Aula401 ;
+  :belongsToProject :ProyectoSalonInteligente ;
+  sosa:observes :Temperature .
+
+:SensorHum401 a :SensorDevice ;
+  rdfs:label "Sensor de humedad Aula 401"@es ;
+  :hasDeviceId "ESP32-HUM-401" ;
+  :hasIPAddress "192.168.0.11" ;
+  :installedIn :Aula401 ;
+  :belongsToProject :ProyectoSalonInteligente ;
+  sosa:observes :Humidity .
+
+:SensorCO2401 a :SensorDevice ;
+  rdfs:label "Sensor de CO2 Aula 401"@es ;
+  :hasDeviceId "ESP32-CO2-401" ;
+  :hasIPAddress "192.168.0.12" ;
+  :installedIn :Aula401 ;
+  :belongsToProject :ProyectoSalonInteligente ;
+  sosa:observes :CO2Level .
+
+# Actuadores en Aula 401
+:ActuadorAC401 a :ActuatorDevice ;
+  rdfs:label "Aire acondicionado Aula 401"@es ;
+  :hasDeviceId "AC-401" ;
+  :hasIPAddress "192.168.0.20" ;
+  :installedIn :Aula401 ;
+  :belongsToProject :ProyectoSalonInteligente ;
+  sosa:actsOnProperty :Temperature .
+
+:ActuadorLuz401 a :ActuatorDevice ;
+  rdfs:label "Control de luces Aula 401"@es ;
+  :hasDeviceId "LIGHT-401" ;
+  :hasIPAddress "192.168.0.21" ;
+  :installedIn :Aula401 ;
+  :belongsToProject :ProyectoSalonInteligente ;
+  sosa:actsOnProperty :Illuminance .
+
+########################
+# OBSERVACIONES DE EJEMPLO
+########################
+
+:ObsTemp401_2025_12_01T09_00 a sosa:Observation ;
+  rdfs:label "Obs temperatura 24.5°C Aula 401 2025-12-01 09:00"@es ;
+  sosa:madeBySensor :SensorTemp401 ;
+  sosa:hasFeatureOfInterest :Aula401 ;
+  sosa:observedProperty :Temperature ;
+  sosa:hasSimpleResult "24.5"^^xsd:decimal ;
+  sosa:resultTime "2025-12-01T09:00:00"^^xsd:dateTime .
+
+:ObsTemp401_2025_12_01T10_00 a sosa:Observation ;
+  rdfs:label "Obs temperatura 25.2°C Aula 401 2025-12-01 10:00"@es ;
+  sosa:madeBySensor :SensorTemp401 ;
+  sosa:hasFeatureOfInterest :Aula401 ;
+  sosa:observedProperty :Temperature ;
+  sosa:hasSimpleResult "25.2"^^xsd:decimal ;
+  sosa:resultTime "2025-12-01T10:00:00"^^xsd:dateTime .
+
+:ObsCO2401_2025_12_01T09_00 a sosa:Observation ;
+  rdfs:label "Obs CO2 850 ppm Aula 401 2025-12-01 09:00"@es ;
+  sosa:madeBySensor :SensorCO2401 ;
+  sosa:hasFeatureOfInterest :Aula401 ;
+  sosa:observedProperty :CO2Level ;
+  sosa:hasSimpleResult "850"^^xsd:integer ;
+  sosa:resultTime "2025-12-01T09:00:00"^^xsd:dateTime .
+
+########################
+# EJEMPLO DE ACCIONES (ACTUACIONES)
+########################
+
+:Action_AC401_On_2025_12_01T09_05 a sosa:Actuation ;
+  rdfs:label "Encendido AC Aula 401 2025-12-01 09:05"@es ;
+  sosa:madeByActuator :ActuadorAC401 ;
+  sosa:actsOnProperty :Temperature ;
+  sosa:hasFeatureOfInterest :Aula401 ;
+  sosa:hasSimpleResult "ON"^^xsd:string ;
+  sosa:resultTime "2025-12-01T09:05:00"^^xsd:dateTime .
