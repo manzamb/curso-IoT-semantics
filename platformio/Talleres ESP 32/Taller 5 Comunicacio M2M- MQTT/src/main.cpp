@@ -67,10 +67,8 @@ const char* mqtt_server = "192.168.127.41";
   }
 
 } */
-int pinUp = bombillopin;            //Tópioco para el bombillo: up
-int pinDown = umbralTemperatura;    //Tópioco para el UmbralTemperatura: Down
-int pinCircle = ventiladorpin;      //Tópioco para el ventilador: circle
-int pinCloseFar = umbralLuz;        //Tópioco para el UmbralLuz: closefar
+int pinUp = bombillopin;            //Tópico para el bombillo: up
+int pinCircle = ventiladorpin;      //Tópico para el ventilador: circle
 
 void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Mensaje recibido [");
@@ -84,39 +82,37 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
   Serial.println(message);
 
-  // Elegir el pin según el tópico
-  int selectedPin = -1;
-
   String t = String(topic);
 
-  if (t == "up") {
-    selectedPin = pinUp;
-  }
-  else if (t == "down") {
-    umbralTemperatura = pinDown - 5;  // Disminuir umbral en 5 grados
-  }
-  else if (t == "circle") {
-    selectedPin = pinCircle;
-  }
-  else if (t == "closefar") {
-    umbralLuz = pinCloseFar + 50;  // Aumentar umbral en 50 unidades
-  }
-
-  // Si no coincide ningún tópico, salir
-  if (selectedPin == -1) {
-    Serial.println("Tópico no reconocido");
+  // Actuadores: se encienden/apagan según el payload
+  if (t == "up" || t == "circle") {
+    int selectedPin = (t == "up") ? pinUp : pinCircle;
+    bool turnOn = (message == "0");         // Mensaje "0" → activar
+    digitalWrite(selectedPin, turnOn ? LOW : HIGH);
+    Serial.print(" → ");
+    Serial.print((t == "up") ? "Bombillo" : "Ventilador");
+    Serial.println(turnOn ? " ON" : " OFF");
     return;
   }
 
-  // Encender o apagar según el payload
-  if (message == "0") {
-    digitalWrite(selectedPin, LOW);   // Enciende (activo en LOW)
-    Serial.println(" → Bombillo ON");
+  // Ajuste de umbrales: subir o bajar según el payload
+  if (t == "down") {
+    int delta = 5;
+    umbralTemperatura += (message == "0") ? -delta : delta;
+    Serial.print("Nuevo umbral de temperatura: ");
+    Serial.println(umbralTemperatura);
+    return;
   }
-  else {
-    digitalWrite(selectedPin, HIGH);  // Apaga
-    Serial.println(" → Bombillo OFF");
+
+  if (t == "closefar") {
+    int delta = 50;
+    umbralLuz += (message == "0") ? -delta : delta;
+    Serial.print("Nuevo umbral de luz: ");
+    Serial.println(umbralLuz);
+    return;
   }
+
+  Serial.println("Tópico no reconocido");
 }
 
 
