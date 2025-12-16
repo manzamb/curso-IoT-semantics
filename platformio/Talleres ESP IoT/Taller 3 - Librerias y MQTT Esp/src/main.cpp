@@ -26,7 +26,12 @@ int nummedicion = 0;                                //Establece el número conse
 const unsigned long postingInterval = 5L * 1000L;  //Establece cada cuanto se envia a ThingSpeak
 unsigned long lastConnectionTime = 0;               //Para controlar el tiempo de generar nueva medición
 long lastUpdateTime = 0;                            //Momento de la última actualización
-
+//Pins para los tópicos MQTT
+int pinUp = bombillopin;                            // Topico para el bombillo: up
+int pinCircle = ventiladorpin;                      // Topico para el ventilador: circle
+// Automatico o Manual (AppWeb)
+bool lightManual = false;
+bool fanManual = false;
 
 //************************ Configurar MQTT ************************
 #include <PubSubClient.h>
@@ -42,50 +47,103 @@ int value = 0;
 //Broquer MQTT
 //const char* mqtt_server = "iot.eclipse.org";
 //Servidor en la ORANGEPi
-const char* mqtt_server ="192.168.68.111";
+//const char* mqtt_server ="192.168.127.14";
+const char* mqtt_server = "broker.hivemq.com";
 //const char* mqtt_server = "192.168.121.81";
 
 void callback(char* topic, byte* payload, unsigned int length) {
-  Serial.print("Message arrived [");
+  Serial.print("Mensaje recibido [");
   Serial.print(topic);
   Serial.print("] ");
+
+  String message;
   for (unsigned int i = 0; i < length; i++) {
-    Serial.print((char)payload[i]);
+    message += (char)payload[i];
   }
-  Serial.println();
+  Serial.println(message);
 
-  // Switch on the LED if an 0 was received as first character
-  if ((char)payload[0] == '0') {
-    digitalWrite(bombillopin, LOW);   // Turn the LED on (Note that LOW is the voltage level
-    // but actually the LED is on; this is because
-    // it is acive low on the ESP-01)
-  } else {
-    digitalWrite(bombillopin, HIGH);  // Turn the LED off by making the voltage HIGH
+  String t = String(topic);
+
+  // Actuadores: se encienden/apagan segun el payload
+  if (t == "up" || t == "circle") {
+    int selectedPin = (t == "up") ? pinUp : pinCircle;
+    bool turnOn = (message == "1");  // Mensaje "1" => activar
+    digitalWrite(selectedPin, turnOn ? HIGH : LOW);
+    Serial.print((t == "up") ? "Bombillo" : "Ventilador");
+    Serial.println(turnOn ? " ON" : " OFF");
+
+    if (t == "up") {
+      lightManual = true;
+      estadobombillo = turnOn;
+    } else {
+      fanManual = true;
+      estadoventilador = turnOn;
+    }
+    return;
   }
 
+  // Ajuste de umbrales: subir o bajar segun el payload
+  if (t == "down") {
+    int delta = 5;
+    umbralTemperatura += (message == "0") ? -delta : delta;
+    Serial.print("Nuevo umbral de temperatura: ");
+    Serial.println(umbralTemperatura);
+    fanManual = false;  // volver a automatico al cambiar umbral
+    // aplicar logica automatica inmediatamente
+    estadoventilador = UmbralMayorDeSensorActuador(temperatura, umbralTemperatura, ventiladorpin);
+    return;
+  }
+
+  if (t == "closefar") {
+    int delta = 50;
+    umbralLuz += (message == "0") ? -delta : delta;
+    Serial.print("Nuevo umbral de luz: ");
+    Serial.println(umbralLuz);
+    lightManual = false;  // volver a automatico al cambiar umbral
+    // aplicar logica automatica inmediatamente
+    estadobombillo = UmbralMenorDeSensorActuador(luminosidad, umbralLuz, bombillopin);
+    return;
+  }
+
+  
+  if (t == "automatic") {
+    lightManual = false;  // volver a automatico
+    fanManual = false;    // volver a automatico
+    Serial.println("Modo automatico activado para bombillo y ventilador");
+    // aplicar logica automatica inmediatamente
+    estadoventilador = UmbralMayorDeSensorActuador(temperatura, umbralTemperatura, ventiladorpin);
+    estadobombillo = UmbralMenorDeSensorActuador(luminosidad, umbralLuz, bombillopin);
+    return;
+  }
+  Serial.println("Topico no reconocido");
 }
 
 void reconnect() {
-  // Loop until we're reconnected
+  // Loop hasta reconectar
   while (!client.connected()) {
-    Serial.print("Attempting MQTT connection...");
-    // Attempt to connect
-    if (client.connect("ESP8266Client")) {
-      Serial.println("connected");
-      // Once connected, publish an announcement...
-      if (temperatura > 0){
-        snprintf (msg, 75, "%f", temperatura);
-        client.publish("temperaturaSalida",msg);
+    Serial.print("Intentando conexion MQTT...");
+    String clientId = "ESP32Client-";
+    clientId += String(random(0xffff), HEX);
+    if (client.connect(clientId.c_str())) {
+      Serial.println("conectado");
+      if (temperatura > 0) {
+        snprintf(msg, 75, "%f", temperatura);
+        client.publish("temperaturaSalida", msg);
         Serial.println("enviando...");
         Serial.println(msg);
       }
-      // ... and resubscribe
+      // Suscripcion a topicos
       client.subscribe("accionLed");
+      client.subscribe("up");
+      client.subscribe("circle");
+      client.subscribe("down");
+      client.subscribe("closefar");
+      client.subscribe("automatic");
+      Serial.println("Suscripciones completadas");
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
       Serial.println(" try again in 5 seconds");
-      // Wait 5 seconds before retrying
       delay(5000);
     }
   }
@@ -157,14 +215,39 @@ void loop()
       Serial.println(" ============");
       ImprimirValorSensor(temperatura,"Temperatura Sala"," ℃ ");
       //Se verifica umbral antes de imprimier el estado del actuador
-      estadoventilador = UmbralMayorDeSensorActuador(temperatura,umbralTemperatura,ventiladorpin);
+          // Control ventilador
+      if (!fanManual) {
+        estadoventilador = UmbralMayorDeSensorActuador(temperatura, umbralTemperatura, ventiladorpin);
+      } else {
+        estadoventilador = digitalRead(ventiladorpin);
+      }
       ImprimirEstadoActuador(ventiladorpin,"Ventilador Sala");
       ImprimirValorSensor(luminosidad,"Luminosidad Sala"," V. ");
       //Se verifica umbral antes de imprimier el estado del actuador
-      //En caso de querer controlarlo con mqtt comentar la siguiente linea
-      estadobombillo = UmbralMenorDeSensorActuador(luminosidad,umbralLuz,bombillopin);
+      // Control bombillo
+      if (!lightManual) {
+        estadobombillo = UmbralMenorDeSensorActuador(luminosidad, umbralLuz, bombillopin);
+      }  else {
+      estadobombillo = digitalRead(bombillopin);
+      }
       ImprimirEstadoActuador(bombillopin,"Bobillo Sala");
-      Serial.println("========================================"); 
+
+      Serial.println("=============== UMBRAlES =========================");
+      Serial.print("Umbral luz: ");
+      Serial.print(umbralLuz);
+      snprintf (msg, 75, "%d", umbralLuz);
+      client.publish("UmbralActualLuz", msg);
+
+      Serial.print(" | Umbral temp: ");
+      Serial.println(umbralTemperatura);
+      snprintf (msg, 75, "%d", umbralTemperatura);
+      client.publish("UmbralActualTemperatura", msg);
+
+      Serial.print("Modo bombillo: ");
+      Serial.println(lightManual ? "Manual" : "Automatico");
+      Serial.print("Modo ventilador: ");
+      Serial.println(fanManual ? "Manual" : "Automatico");
+      Serial.println("=============== PUBLICANDO MQTT =========================");
 
       //Enviar los datos al servidor MQTT
       //Publicar la temperatura
@@ -191,5 +274,6 @@ void loop()
       Serial.print("Publicando el estado del bombillo en el Servidor MQTT: ");
       Serial.println(msg);
       client.publish("bombilloSalida", msg);
+      Serial.println("=====================================================");
     }
 }
